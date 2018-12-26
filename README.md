@@ -36,7 +36,7 @@ Demo 演示地址：http://gaobili.cn:8600/swagger/index.html
 	  
 	  * T4模板代码生成器
 	  
-	  * Quartz.Net 调度任务组件 https://github.com/quartznet/quartznet
+	  * Quartz.Net 调度任务组件   https://github.com/quartznet/quartznet
 	  
 	数据库相关：
 	
@@ -48,7 +48,8 @@ Demo 演示地址：http://gaobili.cn:8600/swagger/index.html
 	  
 	  * Lambda、Linq、SQL
 	  
-	  * EntityFramework反向POCO代码生成器（这个插件暂不支持.NetCore和EFCore，需要改写作者的代码，有空的可以研究下这个组件）https://github.com/sjh37/EntityFramework-Reverse-POCO-Code-First-Generator  
+	  * EntityFramework反向POCO代码生成器
+	  （这个插件暂不支持.NetCore和EFCore，需要改写作者的代码，有空的可以研究下这个组件）  https://github.com/sjh37/EntityFramework-Reverse-POCO-Code-First-Generator  
 	  
 	前端技术：
 	

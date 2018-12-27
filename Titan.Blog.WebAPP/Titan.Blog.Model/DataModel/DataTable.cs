@@ -42,24 +42,52 @@ namespace Titan.Model.DataModel
     [System.CodeDom.Compiler.GeneratedCode("EF.Reverse.POCO.Generator", "2.30.0.0")]
     public class Author : IAggregateRoot
     {
+        public Guid PKId { get; set; }
         public int Id { get; set; }
         //作者姓名
         public string AuthorName { get; set; }
-    }
-	#endregion
 
-	#region POCO Configuration
+        public virtual System.Collections.Generic.ICollection<Children> Childrens { get; set; } // SysDept.FK_SysDept_SYSCOMPAN_SysCompany
+    }
+
+    [Table("Children")]
+    [System.CodeDom.Compiler.GeneratedCode("EF.Reverse.POCO.Generator", "2.30.0.0")]
+    public class Children : IAggregateRoot
+    {
+        public Guid id { get; set; }
+        public Guid childrenid { get; set; }
+        //作者姓名
+        public string Name { get; set; }
+
+        public virtual Author Author { get; set; } // FK_SysDept_SYSCOMPAN_SysCompany
+    }
+    #endregion
+
+    #region POCO Configuration
     // SysTitle
     [System.CodeDom.Compiler.GeneratedCode("EF.Reverse.POCO.Generator", "2.30.0.0")]
-    public class SysTitleConfiguration : IEntityTypeConfiguration<Author>
+    public class AuthorConfiguration : IEntityTypeConfiguration<Author>
     {
         public void Configure(EntityTypeBuilder<Author> builder)
         {
-            builder.ToTable("Author").HasKey(r => r.Id); //注：如果Author这个表是以Id做主键的，则可以不用写HasKey(r=>r.Id);
+            builder.ToTable("Author").HasKey(r => r.PKId); //注：如果Author这个表是以Id做主键的，则可以不用写HasKey(r=>r.Id);
+            builder.Property(r => r.Id).HasMaxLength(20);
             builder.Property(r => r.AuthorName).HasMaxLength(20);
         }
     }
 
-	#endregion
+    [System.CodeDom.Compiler.GeneratedCode("EF.Reverse.POCO.Generator", "2.30.0.0")]
+    public class ChildrenConfiguration : IEntityTypeConfiguration<Children>
+    {
+        public void Configure(EntityTypeBuilder<Children> builder)
+        {
+            builder.ToTable("Children").HasKey(r => r.id); //注：如果Author这个表是以Id做主键的，则可以不用写HasKey(r=>r.Id);
+            builder.Property(r => r.childrenid).HasColumnType("uniqueidentifier"); 
+            builder.Property(r => r.Name).HasMaxLength(20);
+
+            builder.HasOne(f => f.Author).WithMany(p => p.Childrens).HasForeignKey(p => p.childrenid);
+        }
+    }
+    #endregion
 }
 // </auto-generated>

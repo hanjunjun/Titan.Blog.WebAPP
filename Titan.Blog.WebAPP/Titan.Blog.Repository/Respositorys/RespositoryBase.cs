@@ -26,7 +26,7 @@ namespace Titan.RepositoryCode.Respositorys
         IUnitOfWorkRepository where T : IAggregateRoot, new()
     {
         private IUnitOfWork _uow = new EFUnitOfWork();
-        public ModelBaseContext context = DataContextFactory.GetDataContext();
+        public ModelBaseContext context = DataContextFactory.GetDataContext();//new ModelBaseContext(new DbContextOptions<ModelBaseContext>());
 
         public RespositoryBase()
         {

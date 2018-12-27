@@ -300,6 +300,10 @@ namespace Titan.Blog.WebAPP
             var assemblysRepository = Assembly.LoadFile(repositoryDllFile);
             builder.RegisterAssemblyTypes(assemblysRepository).AsImplementedInterfaces();
 
+            var aa = Path.Combine(basePath, "Titan.Blog.WebAPP.dll");
+            var bb = Assembly.LoadFile(aa);
+            builder.RegisterAssemblyTypes(bb).AsImplementedInterfaces();
+
             //将services填充到Autofac容器生成器中
             builder.Populate(services);
            

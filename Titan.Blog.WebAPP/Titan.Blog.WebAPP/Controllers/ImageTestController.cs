@@ -23,10 +23,10 @@ namespace Titan.Blog.WebAPP.Controllers
     {
         //构造函数注入上下文
         //private readonly TitanContext _context;
-        //private readonly AuthorDomainSvc _authorSvc;
-        public ImageTestController(/*AuthorDomainSvc authorSvc*/)
+        private readonly AuthorDomainSvc _authorSvc;
+        public ImageTestController(AuthorDomainSvc authorSvc)
         {
-            //_authorSvc = authorSvc;
+            _authorSvc = authorSvc;
         }
 
         [Produces("image/png")]//Swagger可以根据这个来自动选择请求类型
@@ -58,11 +58,11 @@ namespace Titan.Blog.WebAPP.Controllers
         [HttpPost("EFCoreTest", Name = "EFCoreTest")]
         public OpResult<List<Author>> EFCoreTest(string id)
         {
-            ModelBaseContext fds = new ModelBaseContext(new DbContextOptions<ModelBaseContext>());
-            AuthorDomainSvc _authorSvc=new AuthorDomainSvc(new AuthorSvc(new RepositoryCode.ModelRespositoryFactory<Author, Guid>()));
-            var employee = _authorSvc.GetList();
+            //ModelBaseContext fds = new ModelBaseContext(new DbContextOptions<ModelBaseContext>());
+            //AuthorDomainSvc _authorSvc=new AuthorDomainSvc();
+            //var employee = _authorSvc.GetList();
             //var employee = new List<Author>();
-            return new OpResult<List<Author>>(OpResultType.Success, "", employee);
+            return new OpResult<List<Author>>(OpResultType.Success, "", new List<Author>());
 
             //using (var tran = _context.Database.BeginTransaction())
             //{

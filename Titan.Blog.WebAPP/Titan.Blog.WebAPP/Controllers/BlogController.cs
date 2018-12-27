@@ -40,7 +40,7 @@ namespace Titan.Blog.WebAPP.Controllers
         /// <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot" />
         /// </remarks>
         [HttpPost("ArrayTest", Name = "ArrayTest")]
-        public OpResult<List<object>> BlogList([FromBody]string[] arrayStr)
+        public OpResult<List<object>> BlogList([FromBody]List<string> arrayStr)
         {
             var userInfo = UserInfo;
             var data = new List<object>();

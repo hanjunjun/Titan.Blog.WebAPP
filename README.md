@@ -49,8 +49,7 @@ Demo 演示地址：http://gaobili.cn:8600/swagger/index.html
 	  * Lambda、Linq、SQL
 	  
 	  * EntityFramework反向POCO代码生成器
-	  （这个插件不支持.NetCore和EFCore，需要改写作者的代码，有空的可以研究下这个组件）  
-	  https://github.com/sjh37/EntityFramework-Reverse-POCO-Code-First-Generator  
+	  （这个插件不支持.NetCore和EFCore，需要改写作者的代码，有空的可以研究下这个组件）  https://github.com/sjh37/EntityFramework-Reverse-POCO-Code-First-Generator  
 	  
 	前端技术：
 	

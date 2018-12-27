@@ -62,8 +62,6 @@ namespace Titan.Blog.WebAPP
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-
-
             #region EF Core
             //注入上下文对象
             services.AddDbContext<ModelBaseContext>(options =>
@@ -262,7 +260,9 @@ namespace Titan.Blog.WebAPP
             services.AddSingleton(permissionRequirement);
             #endregion
 
+            #region HttpContext上下文注入
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();//httpcontext上下文
+            #endregion
 
             #region AutoFac
             //实例化 AutoFac  容器   

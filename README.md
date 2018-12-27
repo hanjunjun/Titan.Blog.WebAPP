@@ -34,7 +34,7 @@ Demo 演示地址：http://gaobili.cn:8600/swagger/index.html
 	  
 	  * Log4Net日志组件
 	  
-	  * T4模板代码生成器
+	  * T4代码生成器
 	  
 	  * Quartz.Net 调度任务组件   https://github.com/quartznet/quartznet
 	  

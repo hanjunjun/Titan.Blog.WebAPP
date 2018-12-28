@@ -15,7 +15,7 @@ namespace Titan.Blog.WebAPP.Swagger
         public void Apply(SwaggerDocument swaggerDoc, DocumentFilterContext context)
         {
             //swaggerDoc.Definitions.Remove("IFormFile");
-            swaggerDoc.Definitions = null;//清空所有类型
+            //swaggerDoc.Definitions = new Dictionary<string, Schema>{};// null;//清空所有类型
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Titan.RepositoryCode.DataContextStorage
         /// <returns></returns>
         private static string GetThreadName()
         {
-            return Thread.CurrentThread.Name;
+            return Thread.CurrentThread.Name??"";
         }
     }
 }

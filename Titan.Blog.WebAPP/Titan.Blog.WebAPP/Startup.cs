@@ -24,6 +24,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Titan.Blog.Infrastructure.AOP;
 using Titan.Blog.Infrastructure.Auth.Policys;
 using Titan.Blog.Infrastructure.HttpExtenions;
@@ -33,6 +34,8 @@ using Titan.Blog.WebAPP.Filter;
 using Titan.Blog.WebAPP.Swagger;
 using Titan.Model.DataModel;
 using Titan.Blog.AppService.DomainService;
+using Titan.Blog.AppService.ModelService;
+using Titan.RepositoryCode;
 
 namespace Titan.Blog.WebAPP
 {
@@ -62,6 +65,7 @@ namespace Titan.Blog.WebAPP
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            //services.AddScoped<AuthorDomainSvc>().AddScoped<AuthorSvc>().AddScoped<ModelRespositoryFactory<Author, Guid>>();
             #region EF Core
             //注入上下文对象
             services.AddDbContext<ModelBaseContext>(options =>
@@ -270,47 +274,71 @@ namespace Titan.Blog.WebAPP
             //注册要通过反射创建的组件
             //builder.RegisterType<AdvertisementServices>().As<IAdvertisementServices>();
             builder.RegisterType<BlogCacheAOP>();//可以直接替换其他拦截器
-            //builder.RegisterType<AuthorDomainSvc>();//可以直接替换其他拦截器
-            //var assemblysServices1 = Assembly.Load("Blog.Core.Services");
+                                                 //builder.RegisterType<AuthorDomainSvc>();//可以直接替换其他拦截器
+                                                 //var assemblysServices1 = Assembly.Load("Blog.Core.Services");
+            //将services填充到Autofac容器生成器中
+            builder.Populate(services);
+            //获取当前应用程序加载程序集（C/S应用中使用）
+            //var assembly = Assembly.GetExecutingAssembly();
+            //builder.RegisterAssemblyTypes(assembly); //注册所有程序集类定义的非静态类型
 
+
+            //builder.RegisterType<AuthorDomainSvc>();
+            //builder.RegisterType<AuthorSvc>();
+            //builder.RegisterType<ModelRespositoryFactory<Author, Guid>>();
 
             // ※※★※※ 如果你是第一次下载项目，请先F6编译，然后再F5执行，※※★※※
             // ※※★※※ 因为解耦，bin文件夹没有以下两个dll文件，会报错，所以先编译生成这两个dll ※※★※※
 
-
+            builder.RegisterType<ModelRespositoryFactory<Author, Guid>>();
+            var repositoryDllFile = Path.Combine(basePath, "Titan.Blog.Repository.dll");
+            //var assemblysRepository = Assembly.LoadFile(repositoryDllFile);//Assembly.Load("Titan.Blog.Repository");
+            var assemblysRepository = Assembly.Load("Titan.Blog.Repository");
+            builder.RegisterAssemblyTypes(assemblysRepository);
 
             var servicesDllFile = Path.Combine(basePath, "Titan.Blog.AppService.dll");//获取项目绝对路径
-            var assemblysServices = Assembly.LoadFile(servicesDllFile);//直接采用加载文件的方法
-            builder.RegisterAssemblyTypes(assemblysServices).AsImplementedInterfaces();//指定已扫描程序集中的类型注册为提供所有其实现的接口。
-            builder.RegisterAssemblyTypes(assemblysServices)
-                     .AsImplementedInterfaces()
-                     .InstancePerLifetimeScope()
-                     .EnableInterfaceInterceptors()//引用Autofac.Extras.DynamicProxy;
-                     .InterceptedBy(typeof(BlogCacheAOP));//允许将拦截器服务的列表分配给注册。可以直接替换其他拦截器
+            //var assemblysServices = Assembly.LoadFile(servicesDllFile);// Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
+             var assemblysServices =  Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
+            builder.RegisterAssemblyTypes(assemblysServices);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
 
-            var infrastructureDllFile = Path.Combine(basePath, "Titan.Blog.Infrastructure.dll");//获取项目绝对路径
-            var assemblysInfrastructure = Assembly.LoadFile(infrastructureDllFile);//直接采用加载文件的方法
-            builder.RegisterAssemblyTypes(assemblysInfrastructure).AsImplementedInterfaces();//指定已扫描程序集中的类型注册为提供所有其实现的接口。
+            var assemblysModel = Assembly.Load("Titan.Blog.Model");//直接采用加载文件的方法
+            builder.RegisterAssemblyTypes(assemblysModel);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
 
-            var modelDllFile = Path.Combine(basePath, "Titan.Blog.Model.dll");//获取项目绝对路径
-            var assemblysModel = Assembly.LoadFile(modelDllFile);//直接采用加载文件的方法
-            builder.RegisterAssemblyTypes(assemblysModel).AsImplementedInterfaces();//指定已扫描程序集中的类型注册为提供所有其实现的接口。
+            ////builder.RegisterAssemblyTypes(assemblysServices)
+            ////         .AsImplementedInterfaces()
+            ////         .InstancePerLifetimeScope()
+            ////         .EnableInterfaceInterceptors()//引用Autofac.Extras.DynamicProxy;
+            ////         .InterceptedBy(typeof(BlogCacheAOP));//允许将拦截器服务的列表分配给注册。可以直接替换其他拦截器
 
-            var repositoryDllFile = Path.Combine(basePath, "Titan.Blog.Repository.dll");
-            var assemblysRepository = Assembly.LoadFile(repositoryDllFile);
-            builder.RegisterAssemblyTypes(assemblysRepository).AsImplementedInterfaces();
+            //var infrastructureDllFile = Path.Combine(basePath, "Titan.Blog.Infrastructure.dll");//获取项目绝对路径
+            //var assemblysInfrastructure = Assembly.LoadFile(infrastructureDllFile);//直接采用加载文件的方法
+            //builder.RegisterAssemblyTypes(assemblysInfrastructure).AsSelf();//指定已扫描程序集中的类型注册为提供所有其实现的接口。
 
-            var aa = Path.Combine(basePath, "Titan.Blog.WebAPP.dll");
-            var bb = Assembly.LoadFile(aa);
-            builder.RegisterAssemblyTypes(bb).AsImplementedInterfaces();
+            //var modelDllFile = Path.Combine(basePath, "Titan.Blog.Model.dll");//获取项目绝对路径
+            //var assemblysModel = Assembly.LoadFile(modelDllFile);//直接采用加载文件的方法
+            //builder.RegisterAssemblyTypes(assemblysModel).AsSelf();//指定已扫描程序集中的类型注册为提供所有其实现的接口。
 
-            //将services填充到Autofac容器生成器中
-            builder.Populate(services);
-           
+
+
+            //var aa = Path.Combine(basePath, "Titan.Blog.WebAPP.dll");
+            //var bb = Assembly.LoadFile(aa);
+            //builder.RegisterAssemblyTypes(bb);
+
+
+
             //使用已进行的组件登记创建新容器
             var applicationContainer = builder.Build();
+
+            //获取容器内的对象
+            //var data = applicationContainer.ComponentRegistry.Registrations
+            //    .Where(x => x.Activator.LimitType.ToString().Contains("Titan.RepositoryCode")).ToList();
+            //var data1 = applicationContainer.ComponentRegistry.Registrations
+            //    .Where(x => x.Activator.LimitType.ToString().Contains("Titan.Blog.AppService")).ToList();
+
+            //var clas1 = applicationContainer.Resolve<AuthorDomainSvc>();
+            //Console.WriteLine(clas1.GetList());
             #endregion
-            
+
             return new AutofacServiceProvider(applicationContainer);//第三方IOC接管 core内置DI容器
         }
         #endregion

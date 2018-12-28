@@ -13,7 +13,6 @@ using Titan.Blog.Infrastructure.Data;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
 using Titan.Model.DataModel;
-using Titan.AppService.ModelService;
 using Titan.Blog.AppService.DomainService;
 
 namespace Titan.Blog.WebAPP.Controllers
@@ -22,7 +21,6 @@ namespace Titan.Blog.WebAPP.Controllers
     public class ImageTestController : ApiControllerBase
     {
         //构造函数注入上下文
-        //private readonly TitanContext _context;
         private readonly AuthorDomainSvc _authorSvc;
         public ImageTestController(AuthorDomainSvc authorSvc)
         {
@@ -59,10 +57,12 @@ namespace Titan.Blog.WebAPP.Controllers
         public OpResult<List<Author>> EFCoreTest(string id)
         {
             //ModelBaseContext fds = new ModelBaseContext(new DbContextOptions<ModelBaseContext>());
-            //AuthorDomainSvc _authorSvc=new AuthorDomainSvc();
-            //var employee = _authorSvc.GetList();
+            //AuthorDomainSvc _authorSvc = new AuthorDomainSvc();
+            var employee = _authorSvc.GetList();
+            var data = _authorSvc.SqlTest();
+            var ok = _authorSvc.CommandSql();
             //var employee = new List<Author>();
-            return new OpResult<List<Author>>(OpResultType.Success, "", new List<Author>());
+            return new OpResult<List<Author>>(OpResultType.Success, "", employee);
 
             //using (var tran = _context.Database.BeginTransaction())
             //{

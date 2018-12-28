@@ -15,7 +15,7 @@ using Titan.Model;
 using Titan.Model.DataModel;
 using Titan.RepositoryCode;
 
-namespace Titan.AppService.ModelService
+namespace Titan.Blog.AppService.ModelService
 {
     public class AuthorSvc
     {

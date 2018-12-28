@@ -36,11 +36,15 @@ Demo 演示地址：http://gaobili.cn:8600/swagger/index.html
 	  
 	  * T4代码生成器
 	  
-	  * Quartz.Net 调度任务组件   https://github.com/quartznet/quartznet
+	  * Quartz.Net 内置调度任务组件（待开发）   https://github.com/quartznet/quartznet 
+	  
+	  * SignalR 内置消息提醒非轮询 （待开发）
 	  
 	数据库相关：
+		
+	  * AOP缓存 （待开发）
 	
-	  * Repository + DomainService 仓储模式编程 （借鉴同事的 - -!）
+	  * Repository + DomainService 仓储模式编程、IRepository + IDomainService解耦 （可以动态替换掉ORM 待开发）
 	  
 	  * Entity Framework Core 2.2 轻量级ORM框架
 

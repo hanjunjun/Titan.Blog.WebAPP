@@ -20,7 +20,9 @@
 // ReSharper disable UseNameofExpression
 // TargetFrameworkVersion = 4.5
 
+using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 #pragma warning disable 1591    //  Ignore "Missing XML Comment" warning
 namespace Titan.Model.DataModel
@@ -37,7 +39,7 @@ namespace Titan.Model.DataModel
 
         }
 
-        public virtual DbSet<Author> SysCompany { get; set; } // SysCompany
+        public virtual DbSet<Author> Author { get; set; } // SysCompany
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -45,7 +47,15 @@ namespace Titan.Model.DataModel
             //optionsBuilder.UseSqlServer("Data Source=192.168.0.207,1433;Initial Catalog=db_csdn_wx;User ID=hkuser;Password=csdn2018")
 
             //使用mysql 数据库
-            optionsBuilder.UseSqlServer("Data Source=112.74.51.95;Initial Catalog=TestDB;User ID=sa;Password=Hanhongwei123!;MultipleActiveResultSets=true");
+            //optionsBuilder.UseSqlServer("Data Source=112.74.51.95;Initial Catalog=TestDB;User ID=sa;Password=Hanhongwei123!;MultipleActiveResultSets=true");
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
+
+            optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

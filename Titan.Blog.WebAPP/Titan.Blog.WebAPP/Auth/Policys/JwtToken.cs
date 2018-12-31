@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using Titan.Blog.Infrastructure.Data;
 
-namespace Titan.Blog.Infrastructure.Auth.Policys
+namespace Titan.Blog.WebAPP.Auth.Policys
 {
     /// <summary>
     /// JWTToken生成类
@@ -18,7 +16,7 @@ namespace Titan.Blog.Infrastructure.Auth.Policys
         /// <param name="claims">需要在登陆的时候配置</param>
         /// <param name="permissionRequirement">在startup中定义的参数</param>
         /// <returns></returns>
-        public static OpResult<object> BuildJwtToken(Claim[] claims, PermissionRequirement permissionRequirement)
+        public static OpResult<string> BuildJwtToken(Claim[] claims, PermissionRequirement permissionRequirement)
         {
             try
             {
@@ -35,18 +33,18 @@ namespace Titan.Blog.Infrastructure.Auth.Policys
                 // 生成 Token
                 var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
                 //打包返回前台
-                var json = new
-                {
-                    success = true,
-                    token = encodedJwt,
-                    expires_in = permissionRequirement.Expiration.TotalSeconds,
-                    token_type = "Bearer"
-                };
-                return new OpResult<object>(OpResultType.Success, "",json);
+                //var json = new
+                //{
+                //    success = true,
+                //    token = encodedJwt,
+                //    expires_in = permissionRequirement.Expiration.TotalSeconds,
+                //    token_type = "Bearer"
+                //};
+                return new OpResult<string>(OpResultType.Success, "", encodedJwt);
             }
             catch (Exception e)
             {
-                return new OpResult<object>(OpResultType.AuthInvalid,$"令牌生成错误：{e.Message}");
+                return new OpResult<string>(OpResultType.AuthInvalid, $"令牌生成错误：{e.Message}");
             }
         }
     }

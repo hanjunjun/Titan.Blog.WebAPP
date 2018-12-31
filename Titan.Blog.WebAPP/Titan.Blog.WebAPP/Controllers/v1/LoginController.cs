@@ -13,6 +13,7 @@ namespace Titan.Blog.WebAPP.Controllers.v1
     /// </summary>
     [Produces("application/json")]//Swagger可以根据这个来自动选择请求类型
     [CustomRoute(CustomApiVersion.ApiVersions.v1)]
+    [Authorize("Permission")]
     public class LoginController : ApiControllerBase
     {
         #region 授权登录版本1

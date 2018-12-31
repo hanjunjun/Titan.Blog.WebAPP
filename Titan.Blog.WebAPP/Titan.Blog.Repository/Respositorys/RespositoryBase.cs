@@ -16,6 +16,7 @@ using System.Linq.Expressions;
 using System.Globalization;
 using Infrastructure.Domain;
 using Microsoft.EntityFrameworkCore;
+using Titan.Blog.Model.DataModel;
 using Titan.Infrastructure.UnitofWork;
 using Titan.Model;
 

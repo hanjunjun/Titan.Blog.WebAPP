@@ -8,6 +8,8 @@
  * 修改原因：
  * Copyright (c) 2016 Titan.Han . All Rights Reserved. 
  * ***********************************************************************/
+
+using Titan.Blog.Model.DataModel;
 using Titan.Model.DataModel;
 
 namespace Titan.RepositoryCode.DataContextStorage

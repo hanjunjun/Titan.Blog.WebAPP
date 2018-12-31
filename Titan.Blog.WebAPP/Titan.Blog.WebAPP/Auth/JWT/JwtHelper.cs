@@ -1,14 +1,13 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 using Titan.Blog.Infrastructure.Utility;
 
-namespace Titan.Blog.Infrastructure.Auth.JWT
+namespace Titan.Blog.WebAPP.Auth.JWT
 {
     public class JwtHelper
     {

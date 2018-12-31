@@ -12,6 +12,7 @@ using Titan.Model.DataModel;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using Titan.Blog.Infrastructure.HttpExtenions;
+using Titan.Blog.Model.DataModel;
 
 
 namespace Titan.RepositoryCode.DataContextStorage

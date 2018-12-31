@@ -22,11 +22,11 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Blog.Core.AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Titan.Blog.Infrastructure.AOP;
-using Titan.Blog.Infrastructure.Auth.Policys;
 using Titan.Blog.Infrastructure.HttpExtenions;
 using Titan.Blog.Infrastructure.Log;
 using Titan.Blog.Infrastructure.Redis;
@@ -35,6 +35,8 @@ using Titan.Blog.WebAPP.Swagger;
 using Titan.Model.DataModel;
 using Titan.Blog.AppService.DomainService;
 using Titan.Blog.AppService.ModelService;
+using Titan.Blog.Model.DataModel;
+using Titan.Blog.WebAPP.Auth.Policys;
 using Titan.RepositoryCode;
 
 namespace Titan.Blog.WebAPP
@@ -85,7 +87,17 @@ namespace Titan.Blog.WebAPP
             #endregion
 
             #region AutoMapper模型映射
-            services.AddAutoMapper(typeof(Startup));
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<CustomProfile>();
+            });
+
+            services.AddAutoMapper();
+            //services.AddAutoMapper(typeof(Startup));
+            //services.AddAutoMapper(cfg =>
+            //{
+            //    cfg.AddProfile(typeof(CustomProfile));
+            //});
             #endregion
 
             #region CORS全局跨域
@@ -138,9 +150,9 @@ namespace Titan.Blog.WebAPP
                         // {ApiName} 定义成全局变量，方便修改
                         Version = version,
                         Title = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} 接口文档",
-                        Description = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} HTTP API " + version,
+                        Description = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} HTTP WebAPI " + version,
                         TermsOfService = "None",
-                        Contact = new Contact { Name = "Titan.Blog.WebAPP", Email = "1454055505@qq.com", Url = "https://blog.csdn.net/black_bad1993" }
+                        Contact = new Contact { Name = "Titan.Blog.WebAPP", Email = "1454055505@qq.com", Url = "http://gaobili.cn/" }
                     });
                 });
                 var xmlPath1 = Path.Combine(basePath, "Titan.Blog.WebAPP.xml");//这个就是刚刚配置的xml文件名
@@ -220,7 +232,7 @@ namespace Titan.Blog.WebAPP
                 audienceConfig["Issuer"], //发行人
                 audienceConfig["Audience"], //听众
                 signingCredentials, //签名凭据
-                expiration: TimeSpan.FromSeconds(50) //接口的过期时间
+                expiration: TimeSpan.FromSeconds(60*10) //接口的过期时间
             );
 
             //加载角色策略 一个策略对应多个角色，一个角色可以对应多个策略，一个人可以有多个角色
@@ -233,7 +245,7 @@ namespace Titan.Blog.WebAPP
                 options.AddPolicy("SystemOrAdmin",
                     policy => policy.RequireRole("Admin", "System"));
 
-                // 自定义权限要求
+                // 自定义权限要求--使用自定义的拦截器进行权限认证
                 options.AddPolicy("Permission",
                          policy => policy.Requirements.Add(permissionRequirement));
             })
@@ -281,16 +293,17 @@ namespace Titan.Blog.WebAPP
             //获取当前应用程序加载程序集（C/S应用中使用）
             //var assembly = Assembly.GetExecutingAssembly();
             //builder.RegisterAssemblyTypes(assembly); //注册所有程序集类定义的非静态类型
-
-
+            builder.RegisterType<Permission>();
+            builder.RegisterType<SigningCredentials>();
+            builder.RegisterType<TimeSpan>();
             //builder.RegisterType<AuthorDomainSvc>();
             //builder.RegisterType<AuthorSvc>();
             //builder.RegisterType<ModelRespositoryFactory<Author, Guid>>();
 
             // ※※★※※ 如果你是第一次下载项目，请先F6编译，然后再F5执行，※※★※※
             // ※※★※※ 因为解耦，bin文件夹没有以下两个dll文件，会报错，所以先编译生成这两个dll ※※★※※
-
-            builder.RegisterType<ModelRespositoryFactory<Author, Guid>>();
+            builder.RegisterType<ModelRespositoryFactory<SysRoleModuleButton, Guid>>();
+            builder.RegisterType<ModelRespositoryFactory<SysRole, Guid>>();
             var repositoryDllFile = Path.Combine(basePath, "Titan.Blog.Repository.dll");
             //var assemblysRepository = Assembly.LoadFile(repositoryDllFile);//Assembly.Load("Titan.Blog.Repository");
             var assemblysRepository = Assembly.Load("Titan.Blog.Repository");
@@ -377,6 +390,7 @@ namespace Titan.Blog.WebAPP
             });
             #endregion
 
+            //Http上下文
             app.UseStaticHttpContext();
 
             #region 认证配置
@@ -387,11 +401,18 @@ namespace Titan.Blog.WebAPP
             #region Cors跨域配置
             //跨域第二种方法，使用策略，详细策略信息在ConfigureService中
             app.UseCors("LimitRequests");//将 CORS 中间件添加到 web 应用程序管线中, 以允许跨域请求。
-                                         //跨域第一种版本，请要ConfigureService中配置服务 services.AddCors();
-                                         //    app.UseCors(options => options.WithOrigins("http://localhost:8021").AllowAnyHeader()
-                                         //.AllowAnyMethod());
-            #endregion
 
+
+            //跨域第一种版本，请要ConfigureService中配置服务 services.AddCors();
+            //    app.UseCors(options => options.WithOrigins("http://localhost:8021").AllowAnyHeader()
+            //.AllowAnyMethod()); 
+            #endregion
+            // 跳转https
+            app.UseHttpsRedirection();
+            // 使用静态文件
+            app.UseStaticFiles();
+            // 使用cookie
+            app.UseCookiePolicy();
             app.UseStatusCodePages();//把错误码返回前台，比如是404
             //app.UseHttpsRedirection();//将Http重定向Https
             app.UseMvc();

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Titan.Blog.Infrastructure.Data;
 using Titan.Blog.WebAPP.Extensions;
@@ -18,6 +19,7 @@ using Titan.Blog.AppService.DomainService;
 namespace Titan.Blog.WebAPP.Controllers
 {
     [CustomRoute]
+    [Authorize("Permission")]
     public class ImageTestController : ApiControllerBase
     {
         //构造函数注入上下文
@@ -58,11 +60,11 @@ namespace Titan.Blog.WebAPP.Controllers
         {
             //ModelBaseContext fds = new ModelBaseContext(new DbContextOptions<ModelBaseContext>());
             //AuthorDomainSvc _authorSvc = new AuthorDomainSvc();
-            var employee = _authorSvc.GetList();
-            var data = _authorSvc.SqlTest();
-            var ok = _authorSvc.CommandSql();
+            //var employee = _authorSvc.GetList();
+            //var data = _authorSvc.SqlTest();
+            //var ok = _authorSvc.CommandSql();
             //var employee = new List<Author>();
-            return new OpResult<List<Author>>(OpResultType.Success, "", employee);
+            return new OpResult<List<Author>>(OpResultType.Success, "", new List<Author>());
 
             //using (var tran = _context.Database.BeginTransaction())
             //{

@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using Titan.Blog.AppService.DomainService;
 
-namespace Titan.Blog.Infrastructure.Auth.Policys
+namespace Titan.Blog.WebAPP.Auth.Policys
 {
     /// <summary>
     /// 权限授权处理器
@@ -23,33 +22,31 @@ namespace Titan.Blog.Infrastructure.Auth.Policys
         /// <summary>
         /// services 层注入
         /// </summary>
-        //public IRoleModulePermissionServices _roleModulePermissionServices { get; set; }
+        public AuthorDomainSvc _authorDomainSvc { get; set; }
 
         /// <summary>
         /// 构造函数注入
         /// </summary>
         /// <param name="schemes"></param>
         /// <param name="roleModulePermissionServices"></param>
-        public PermissionHandler(IAuthenticationSchemeProvider schemes/*, IRoleModulePermissionServices roleModulePermissionServices*/)
+        public PermissionHandler(IAuthenticationSchemeProvider schemes, AuthorDomainSvc authorDomainSvc)
         {
             Schemes = schemes;
-            //_roleModulePermissionServices = roleModulePermissionServices;
+            _authorDomainSvc = authorDomainSvc;
         }
 
         // 重载异步处理程序--这个是自定义的权限拦截器，[Authorize("Permission")] 标记了这个特性的所有接口都走这个里面验证接口权限
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
         {
             // 将最新的角色和接口列表更新
-            //var data = await _roleModulePermissionServices.GeRoleModule();
-            //var list = (from item in data
-            //            where item.IsDeleted == false
-            //            orderby item.Id
-            //            select new Permission
-            //            {
-            //                Url = item.Module?.LinkUrl,
-            //                Role = item.Role?.Name,
-            //            }).ToList();
-            var list=new List<Permission>();
+            var data = _authorDomainSvc.GeRoleModule();
+            var list = (from item in data
+                        select new Permission
+                        {
+                            Url = item.SysModule?.LinkUrl,
+                            Role = item.SysRole?.RoleName,
+                        }).ToList();
+            //var list=new List<Permission>();
             requirement.Permissions = list;
 
             //从AuthorizationHandlerContext转成HttpContext，以便取出表求信息
@@ -72,6 +69,11 @@ namespace Titan.Blog.Infrastructure.Auth.Policys
             if (defaultAuthenticate != null)
             {
                 var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
+                if (result.Failure!=null && result.Failure.Message.Contains("The token is expired."))
+                {
+                    context.Fail();
+                    throw new UnauthorizedAccessException("令牌已过期，请重新获取授权！");
+                }
                 //result?.Principal不为空即登录成功
                 if (result?.Principal != null)
                 {
@@ -106,6 +108,7 @@ namespace Titan.Blog.Infrastructure.Auth.Policys
                     if ((httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) != null && DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) >= DateTime.Now)
                     {
                         context.Succeed(requirement);
+                        return;
                     }
                     else
                     {

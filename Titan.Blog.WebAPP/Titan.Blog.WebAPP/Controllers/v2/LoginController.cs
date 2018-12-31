@@ -3,9 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Titan.Blog.Infrastructure.Auth.Policys;
+using Titan.Blog.AppService.DomainService;
 using Titan.Blog.Infrastructure.Data;
+using Titan.Blog.Model.DataModel;
+using Titan.Blog.WebAPP.Auth.Policys;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
 
@@ -20,9 +23,11 @@ namespace Titan.Blog.WebAPP.Controllers.v2
     {
         #region 成员、构造函数注入
         private readonly PermissionRequirement _permissionRequirement;
-        public LoginController(PermissionRequirement permissionRequirement)
+        private readonly AuthorDomainSvc _authorDomainSvc;
+        public LoginController(PermissionRequirement permissionRequirement, AuthorDomainSvc authorDomainSvc)
         {
             _permissionRequirement = permissionRequirement;
+            _authorDomainSvc = authorDomainSvc;
         }
         #endregion
 
@@ -34,30 +39,29 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         /// <param name="userPassword">密码</param>
         /// <returns></returns>
         [HttpGet("LoginV2", Name = "LoginV2")]
-        public OpResult<object> GetJwtToken(string userId, string userPassword)
+        public OpResult<string> GetJwtToken(string userId, string userPassword)
         {
-            var user = "Admin,Client,System";
-            if (userId == "1" && userPassword == "1")
+            SysUser sysUser;
+            var op = _authorDomainSvc.VerifyUserInfo(userId, userPassword,out sysUser);
+            if (!op.Successed)
             {
-                var userName = "李逍遥";
-                var cid = Guid.NewGuid();
-                //如果是基于用户的授权策略，这里要添加用户;如果是基于角色的授权策略，这里要添加角色
-                var claims = new List<Claim> {
-                    new Claim(ClaimTypes.Name, userName),
-                    new Claim(ClaimTypes.Expiration, DateTime.Now.AddSeconds(_permissionRequirement.Expiration.TotalSeconds).ToString()) };
-                claims.AddRange(user.Split(',').Select(s => new Claim(ClaimTypes.Role, s)));//数据库中查出来的当前用户的所有角色,号分开，拼接到list里。后面拦截器会根据这个值来筛选他有误权限来访问url。每个接口上有特性标识。
+                return op;
+            }
+            var user = op.Message;
+            var userName = sysUser.UserId;
+            //如果是基于用户的授权策略，这里要添加用户;如果是基于角色的授权策略，这里要添加角色
+            var claims = new List<Claim> {
+                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Expiration, DateTime.Now.AddSeconds(_permissionRequirement.Expiration.TotalSeconds).ToString()) };
+            claims.AddRange(user.Split(',').Select(s => new Claim(ClaimTypes.Role, s)));//数据库中查出来的当前用户的所有角色,号分开，拼接到list里。后面拦截器会根据这个值来筛选他有误权限来访问url。每个接口上有特性标识。
 
-                //用户标识
-                //var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
-                //identity.AddClaims(claims);
-                //_permissionRequirement这是个配置，启动的时候注入进来的
-                _permissionRequirement.Audience = userName;
-                return JwtToken.BuildJwtToken(claims.ToArray(), _permissionRequirement);
-            }
-            else
-            {
-                return new OpResult<object>(OpResultType.AuthInvalid, "帐号或密码不正确！", null);
-            }
+            //用户标识
+            //用户标识
+            //var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
+            //identity.AddClaims(claims);
+            //_permissionRequirement这是个配置，启动的时候注入进来的
+            //_permissionRequirement.Audience = userName;//这个不能加，加了会报错
+            return JwtToken.BuildJwtToken(claims.ToArray(), _permissionRequirement);
         }
         #endregion
 

@@ -16,7 +16,7 @@ Demo 演示地址：http://gaobili.cn:8600/swagger/index.html
 	
       * ASP.NET Core 2.2 WebAPI
 	  
-	  * API统一接口入参，返回值，全局异常拦截封装（抄袭同事的 - -!）
+	  * API统一接口入参，返回值，全局异常拦截封装
       
       * Swagger API文档生成、调试、API版本管理，API基于Restful风格编写接口
 	  

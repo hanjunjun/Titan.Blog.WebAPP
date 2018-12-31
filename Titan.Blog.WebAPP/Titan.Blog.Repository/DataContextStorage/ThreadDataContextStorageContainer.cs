@@ -11,6 +11,7 @@
 using Titan.Model.DataModel;
 using System.Collections;
 using System.Threading;
+using Titan.Blog.Model.DataModel;
 
 namespace Titan.RepositoryCode.DataContextStorage
 {

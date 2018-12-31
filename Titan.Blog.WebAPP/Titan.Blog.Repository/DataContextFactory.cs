@@ -10,6 +10,7 @@
  * ***********************************************************************/
 
 using Microsoft.EntityFrameworkCore;
+using Titan.Blog.Model.DataModel;
 using Titan.Model.DataModel;
 using Titan.RepositoryCode.DataContextStorage;
 

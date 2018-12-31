@@ -1,5 +1,5 @@
 ﻿
-namespace Titan.Blog.Infrastructure.Auth.Policys
+namespace Titan.Blog.WebAPP.Auth.Policys
 {
     /// <summary>
     /// 用户或角色或其他凭据实体

@@ -38,6 +38,17 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         /// <param name="userId">账号</param>
         /// <param name="userPassword">密码</param>
         /// <returns></returns>
+        /// <remarks>
+        /// <h2>权限系统</h2>
+        /// <table border="1">
+        ///     <tr>
+        ///         <td>普通角色：帐号0 密码0</td>
+        ///         <td>普通管理员角色：帐号1 密码1</td>
+        ///         <td>超级管理员角色：帐号2 密码2</td>
+        ///     </tr>
+        /// </table>
+        /// <img src="https://github.com/HanJunJun/Titan.Blog.WebAPP/blob/master/Titan.Blog.WebAPP/Titan.Blog.WebAPP/wwwroot/%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%9B%BE.png" />
+        /// </remarks>
         [HttpGet("LoginV2", Name = "LoginV2")]
         public OpResult<string> GetJwtToken(string userId, string userPassword)
         {

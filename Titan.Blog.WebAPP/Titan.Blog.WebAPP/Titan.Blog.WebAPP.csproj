@@ -51,10 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Titan.Blog.AppService\Titan.Blog.AppService.csproj" />
     <ProjectReference Include="..\Titan.Blog.Infrastructure\Titan.Blog.Infrastructure.csproj" />
     <ProjectReference Include="..\Titan.Blog.Model\Titan.Blog.Model.csproj" />

@@ -47,7 +47,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         ///         <td>超级管理员角色：帐号2 密码2</td>
         ///     </tr>
         /// </table>
-        /// <img src="https://github.com/HanJunJun/Titan.Blog.WebAPP/blob/master/Titan.Blog.WebAPP/Titan.Blog.WebAPP/wwwroot/%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%9B%BE.png" />
+        /// <img src="https://raw.githubusercontent.com/HanJunJun/Titan.Blog.WebAPP/master/Titan.Blog.WebAPP/Titan.Blog.WebAPP/wwwroot/%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%9B%BE.png" />
         /// </remarks>
         [HttpGet("LoginV2", Name = "LoginV2")]
         public OpResult<string> GetJwtToken(string userId, string userPassword)

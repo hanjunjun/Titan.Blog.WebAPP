@@ -187,6 +187,7 @@ namespace Titan.Blog.WebAPP
                 #region Swagger文档过滤
                 c.DocumentFilter<RemoveBogusDefinitionsDocumentFilter>();
                 #endregion
+                
             });
             #endregion
 
@@ -387,6 +388,8 @@ namespace Titan.Blog.WebAPP
                 {
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{(Configuration.GetSection("Swagger"))["" + "ProjectName" + ""]} {version}");
                 });
+                c.InjectJavascript("/jquery/jquery.js");
+                c.InjectJavascript("/swagger-lang.js");
             });
             #endregion
 

@@ -388,6 +388,7 @@ namespace Titan.Blog.WebAPP
                 {
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{(Configuration.GetSection("Swagger"))["" + "ProjectName" + ""]} {version}");
                 });
+                //js注入
                 c.InjectJavascript("/jquery/jquery.js");
                 c.InjectJavascript("/swagger-lang.js");
             });

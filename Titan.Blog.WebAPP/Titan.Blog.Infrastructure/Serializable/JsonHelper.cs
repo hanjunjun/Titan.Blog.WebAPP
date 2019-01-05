@@ -49,5 +49,28 @@ namespace Titan.Blog.Infrastructure.Serializable
 
             return Encoding.UTF8.GetBytes(jsonString);
         }
+
+        //public static string ObjToJson(object obj)
+        //{
+        //    if (obj == null)
+        //        return string.Empty;
+        //    JavaScriptSerializer jss = new JavaScriptSerializer();
+        //    return jss.Serialize(obj);
+        //}
+
+        //public static T ObjFromJson<T>(string cookie)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(cookie))
+        //            return default(T);
+        //        JavaScriptSerializer jss = new JavaScriptSerializer();
+        //        return jss.Deserialize<T>(cookie);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //}
     }
 }

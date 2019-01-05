@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.OpenApi.Models;
 using Spire.Doc;
 using Spire.Doc.Documents;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Titan.Blog.Infrastructure.File;
+using Titan.Blog.Infrastructure.Http;
+using Titan.Blog.Infrastructure.Office;
+using Titan.Blog.Infrastructure.Serializable;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
 
@@ -19,65 +24,48 @@ namespace Titan.Blog.WebAPP.Controllers
     public class SwaggerController: ApiControllerBase
     {
         private readonly IHostingEnvironment _hostingEnvironment;
-        public SwaggerController(IHostingEnvironment hostingEnvironment)
+        private readonly SpireDocHelper _spireDocHelper;
+        private readonly SwaggerGenerator _swaggerGenerator;
+        public SwaggerController(IHostingEnvironment hostingEnvironment, SpireDocHelper spireDocHelper, SwaggerGenerator swaggerGenerator)
         {
             _hostingEnvironment = hostingEnvironment;
+            _spireDocHelper = spireDocHelper;
+            _swaggerGenerator = swaggerGenerator;
         }
 
         [HttpGet("ExportApiWord", Name = "ExportApiWord")]
-        public FileResult ExportApiWord()
+        public FileResult ExportApiWord(int type,string version)
         {
-            string fileName = Guid.NewGuid().ToString() + ".docx";
-            string webRootPath = _hostingEnvironment.WebRootPath;
-            string path = webRootPath + @"\Files\TempFiles\";
-            var addrUrl = path + $"{fileName}";
-            FileStream fileStream = null;
-            try
+            string memi=string.Empty;
+            string fileExten = string.Empty;
+            Stream outdata=null;
+            //获取swagger json
+            //var url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/swagger/v2/swagger.json";
+            //var data = RestSharpHelper.HttpGet(url);
+            //var model = JsonHelper.StrToModel<OpenApiDocument>(data);
+            var model= _swaggerGenerator.GetSwagger(version);
+            switch (type)
             {
-
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-                //System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
-
-                var data = System.Text.Encoding.Default.GetBytes(SwaggerExtensions.HTML);
-                //byte[] data = Encoding.Default.getbyte(ByteHelpe.html); 
-                var stream = ByteHelper.BytesToStream(data);
-                //创建Document实例
-                Document document = new Document();
-
-                //加载HTML文档
-                //document.LoadFromFile("APIDocument.html", FileFormat.Html, XHTMLValidationType.None);
-                document.LoadFromStream(stream, FileFormat.Html, XHTMLValidationType.None);
-                //保存为Word
-                document.SaveToFile(addrUrl, FileFormat.Docx);
-                //document.Close();
-                fileStream = System.IO.File.Open(addrUrl, FileMode.Open);
-                var filedata = ByteHelper.StreamToBytes(fileStream);
-                var outdata = ByteHelper.BytesToStream(filedata);
-                //获取文件的ContentType
-
-
-                //TestDBContext te = new TestDBContext(new DbContextOptions<TestDBContext>());
-                //var test= te.Author.ToList();
-                //return new string[] { "value1", "value2" };
-                var provider = new FileExtensionContentTypeProvider();
-                var memi = provider.Mappings[".docx"];
-                return File(outdata, memi, "Titan.Blog.WebAPP API文档.docx");
+                case 1:
+                    //Word
+                    var op = _spireDocHelper.SwaggerHtmlToWord(SwaggerExtensions.HTML, out memi,out fileExten);
+                    if (!op.Successed)
+                    {
+                        throw new Exception(op.Message);
+                    }
+                    outdata = op.Data;
+                    break;
+                case 2:
+                    //PDF
+                    break;
+                case 3:
+                    //Html
+                    break;
+                case 4:
+                    //Gif
+                    break;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return null;
-            }
-            finally
-            {
-                if (fileStream != null)
-                    fileStream.Close();
-                if (System.IO.File.Exists(addrUrl))
-                    System.IO.File.Delete(addrUrl);//删掉文件
-            }
+            return File(outdata, memi, $"Titan.Blog.WebAPP API文档{fileExten}");
         }
     }
 }

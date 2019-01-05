@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Titan.Blog.WebAPP.Swagger
 {
     /// <summary>
-    /// 文档过滤
+    /// 过滤model返回值
     /// </summary>
     public class RemoveBogusDefinitionsDocumentFilter : IDocumentFilter
     {

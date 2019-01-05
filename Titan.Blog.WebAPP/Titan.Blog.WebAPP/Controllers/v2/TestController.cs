@@ -9,7 +9,7 @@ using Titan.Blog.WebAPP.Swagger;
 namespace Titan.Blog.WebAPP.Controllers.v2
 {
     /// <summary>
-    /// 测试模块
+    /// Restful API 示例 
     /// </summary>
     [Produces("application/json")]//Swagger可以根据这个来自动选择请求类型
     [CustomRoute(CustomApiVersion.ApiVersions.v2)]
@@ -23,7 +23,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         }
         #endregion
 
-        #region 博客增删改查
+        #region 增删改查
         /// <remarks>
         /// <h2>Testing html table</h2>
         /// <table border="1">

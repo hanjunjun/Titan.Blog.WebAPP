@@ -26,6 +26,7 @@ using Blog.Core.AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using Titan.Blog.Infrastructure.AOP;
 using Titan.Blog.Infrastructure.HttpExtenions;
 using Titan.Blog.Infrastructure.Log;
@@ -38,6 +39,7 @@ using Titan.Blog.AppService.ModelService;
 using Titan.Blog.Model.DataModel;
 using Titan.Blog.WebAPP.Auth.Policys;
 using Titan.RepositoryCode;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Titan.Blog.WebAPP
 {
@@ -130,6 +132,7 @@ namespace Titan.Blog.WebAPP
             #endregion
 
             #region Swagger UI Service API文档服务
+            services.AddScoped<SwaggerGenerator>();//GetSwagger获取swagger.json的核心代码在这里面，这里我们用ioc容器存储对象，后面直接调里面的获取json的方法。
             var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
             services.AddSwaggerGen(c =>
             {
@@ -180,12 +183,12 @@ namespace Titan.Blog.WebAPP
                 });
                 #endregion
 
-                #region Swagger文件上传配置
-                c.OperationFilter<SwaggerUploadFileFilter>();
+                #region Swagger参数自定义
+                c.OperationFilter<SwaggerUploadFileFilter>();//文件上传参数
                 #endregion
 
                 #region Swagger文档过滤
-                c.DocumentFilter<RemoveBogusDefinitionsDocumentFilter>();
+                c.DocumentFilter<RemoveBogusDefinitionsDocumentFilter>();//过滤model
                 #endregion
                 
             });
@@ -318,6 +321,9 @@ namespace Titan.Blog.WebAPP
             var assemblysModel = Assembly.Load("Titan.Blog.Model");//直接采用加载文件的方法
             builder.RegisterAssemblyTypes(assemblysModel);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
 
+            var assemblysInfrastru = Assembly.Load("Titan.Blog.Infrastructure");//直接采用加载文件的方法
+            builder.RegisterAssemblyTypes(assemblysInfrastru);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
+
             ////builder.RegisterAssemblyTypes(assemblysServices)
             ////         .AsImplementedInterfaces()
             ////         .InstancePerLifetimeScope()
@@ -388,9 +394,32 @@ namespace Titan.Blog.WebAPP
                 {
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{(Configuration.GetSection("Swagger"))["" + "ProjectName" + ""]} {version}");
                 });
+                // Display
+                c.DefaultModelExpandDepth(2);
+                c.DefaultModelRendering(ModelRendering.Model);
+                c.DefaultModelsExpandDepth(-1);//不显示model
+                c.DisplayOperationId();
+                c.DisplayRequestDuration();
+                c.DocExpansion(DocExpansion.None);
+                c.EnableDeepLinking();
+                //c.EnableFilter();
+                c.ShowExtensions();
+
+                // Network
+                c.EnableValidator();
+                //c.SupportedSubmitMethods(SubmitMethod.Get);
+
+                // Other
+                c.DocumentTitle = "Titan.Blog.API 在线文档调试";
+                //css注入
+                c.InjectStylesheet("/swagger-common.css");
+                c.InjectStylesheet("/buzyload/app.min.css");
                 //js注入
                 c.InjectJavascript("/jquery/jquery.js");
+                c.InjectJavascript("/buzyload/app.min.js");
                 c.InjectJavascript("/swagger-lang.js");
+
+                
             });
             #endregion
 

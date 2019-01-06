@@ -3,6 +3,8 @@ ASP.NET Core 2.2 前后端分离、后端框架，这个项目本人会长期维
 
 # Demo 演示地址：http://gaobili.cn:8600/swagger/index.html
 
+# 博客园地址：https://www.cnblogs.com/hjjblog
+
 ![Logo](https://github.com/HanJunJun/Titan.Blog.WebAPP/blob/master/Titan.Blog.WebAPP/Titan.Blog.WebAPP/wwwroot/demo.png)
 
 # 角色授权设计：
@@ -68,11 +70,13 @@ ASP.NET Core 2.2 前后端分离、后端框架，这个项目本人会长期维
 	  
 # 开发计划：
 	
-	1.Swagger 导出API文档到Word、PDF、Html。
+	1.Swagger 导出API文档到Word、PDF、Html。--2019-01-06 已完成
 	2.Swagger 后台返回图像，前端显示图像。
 	3.接口加频率限制，超出频率提示验证码。
 	4.IP黑名单过滤。
 	5.EF Core 仓储模式重构。
 	6.AOP缓存实现
 	7.短信接口
-	8.
+	8.微信集成
+	9.开源项目分支：EF Core POCO 代码生成器，使用RazorEngine MVC模板引擎实现，支持DBFirst和CodeFirst
+	目前就想到这么多。

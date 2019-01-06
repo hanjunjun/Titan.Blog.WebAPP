@@ -21,6 +21,9 @@ using Titan.Infrastructure.Domain;
 
 namespace Titan.Blog.WebAPP.Controllers
 {
+    /// <summary>
+    /// Swagger 自定义功能
+    /// </summary>
     [CustomRoute]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class SwaggerController: ApiControllerBase

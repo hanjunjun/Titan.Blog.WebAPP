@@ -52,19 +52,19 @@ function LoadExportApiWordBtn() {
         "<div class='drop'>" +
         "<ul style='margin: 0;padding: 0;'>" +
         "<li>" +
-        "<a href='javascript:void(0);' onclick='ExportApiWord(1)'>导出到Word</a>" +
+        "<a href='javascript:void(0);' onclick='ExportApiWord(1)'>导出 Word</a>" +
         "</li>" +
         "<li>" +
-        "<a href='javascript:void(0);' onclick='ExportApiWord(2)'>导出到PDF</a>" +
+        "<a href='javascript:void(0);' onclick='ExportApiWord(2)'>导出 PDF</a>" +
         "</li>" +
         "<li>" +
-        "<a href='javascript:void(0);' onclick='ExportApiWord(3)'>导出到Html</a>" +
+        "<a href='javascript:void(0);' onclick='ExportApiWord(3)'>导出 Html</a>" +
         "</li >" +
         "<li>" +
-        "<a href='javascript:void(0);' onclick='ExportApiWord(4)'>导出到Xml</a>" +
+        "<a href='javascript:void(0);' onclick='ExportApiWord(4)'>导出 Xml</a>" +
         "</li >" +
         "<li>" +
-        "<a href='javascript:void(0);' onclick='ExportApiWord(5)'>导出到Svg</a>" +
+        "<a href='javascript:void(0);' onclick='ExportApiWord(5)'>导出 Svg</a>" +
         "</li >" +
         "</ul >" +
         "</div >" +

@@ -14,8 +14,10 @@ using Titan.Blog.Infrastructure.File;
 using Titan.Blog.Infrastructure.Http;
 using Titan.Blog.Infrastructure.Office;
 using Titan.Blog.Infrastructure.Serializable;
+using Titan.Blog.Infrastructure.T4;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
+using Titan.Infrastructure.Domain;
 
 namespace Titan.Blog.WebAPP.Controllers
 {
@@ -34,7 +36,7 @@ namespace Titan.Blog.WebAPP.Controllers
         }
 
         [HttpGet("ExportApiWord", Name = "ExportApiWord")]
-        public FileResult ExportApiWord(int type,string version)
+        public FileResult ExportApiWord(string type,string version)
         {
             string memi=string.Empty;
             string fileExten = string.Empty;
@@ -43,29 +45,19 @@ namespace Titan.Blog.WebAPP.Controllers
             //var url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/swagger/v2/swagger.json";
             //var data = RestSharpHelper.HttpGet(url);
             //var model = JsonHelper.StrToModel<OpenApiDocument>(data);
-            var model= _swaggerGenerator.GetSwagger(version);
-            switch (type)
+            var model = _swaggerGenerator.GetSwagger(version);
+            if (model == null)
             {
-                case 1:
-                    //Word
-                    var op = _spireDocHelper.SwaggerHtmlToWord(SwaggerExtensions.HTML, out memi,out fileExten);
-                    if (!op.Successed)
-                    {
-                        throw new Exception(op.Message);
-                    }
-                    outdata = op.Data;
-                    break;
-                case 2:
-                    //PDF
-                    break;
-                case 3:
-                    //Html
-                    break;
-                case 4:
-                    //Gif
-                    break;
+                throw new Exception("Swagger Json cannot be equal to null！");
             }
-            return File(outdata, memi, $"Titan.Blog.WebAPP API文档{fileExten}");
+            var html = T4Helper.GeneritorSwaggerHtml($"{_hostingEnvironment.WebRootPath}\\SwaggerDoc.cshtml",model);
+            var op = _spireDocHelper.SwaggerHtmlConvers(html, type, out memi);
+            if (!op.Successed)
+            {
+                throw new Exception(op.Message);
+            }
+            outdata = op.Data;
+            return File(outdata, memi, $"Titan.Blog.WebAPP API文档 {version}{type}");
         }
     }
 }

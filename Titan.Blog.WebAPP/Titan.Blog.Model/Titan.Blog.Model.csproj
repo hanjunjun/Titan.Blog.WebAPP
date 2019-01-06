@@ -13,6 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CommonModel\BasicAuthScheme.cs" />
+    <Compile Remove="CommonModel\ISwaggerProvider.cs" />
     <Compile Remove="DataModel\DataExtensions.cs" />
   </ItemGroup>
 

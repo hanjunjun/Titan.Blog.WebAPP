@@ -29,6 +29,11 @@ namespace Titan.Blog.WebAPP.Controllers.v2
             _authorSvc = authorSvc;
         }
 
+        /// <summary>
+        /// 获取图片
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [Produces("image/png")]//Swagger可以根据这个来自动选择请求类型
         [HttpGet("GetImage/{id}",Name = "GetImage")]
@@ -40,6 +45,11 @@ namespace Titan.Blog.WebAPP.Controllers.v2
             return response;
         }
 
+        /// <summary>
+        /// 查询数据库
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         /// <remarks>
         /// <h2>Testing html table</h2>
         /// <table border="1">

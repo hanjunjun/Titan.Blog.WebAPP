@@ -24,6 +24,11 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         #endregion
 
         #region 增删改查
+        /// <summary>
+        /// 数组参数
+        /// </summary>
+        /// <param name="arrayStr"></param>
+        /// <returns></returns>
         /// <remarks>
         /// <h2>Testing html table</h2>
         /// <table border="1">
@@ -182,6 +187,12 @@ namespace Titan.Blog.WebAPP.Controllers.v2
             return new OpResult<string>(OpResultType.Success, $"删除{id}成功！");
         }
 
+        /// <summary>
+        /// Hidden测试
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         /// <remarks>
         /// ## TESTING MARKDOWN TABLES
         /// ### start table
@@ -201,6 +212,12 @@ namespace Titan.Blog.WebAPP.Controllers.v2
             return new OpResult<string>(OpResultType.Success, $"获取{id}, {name}");
         }
 
+        /// <summary>
+        /// Hidden2测试
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         /// <remarks>
         /// ## TESTING MARKDOWN TABLES
         /// ### start table
@@ -221,7 +238,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         }
 
         /// <summary>
-        /// ApiExplorerSettings特性可以隐藏这个接口不在swagger里显示
+        /// ApiExplorerSettings隐藏测试
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>

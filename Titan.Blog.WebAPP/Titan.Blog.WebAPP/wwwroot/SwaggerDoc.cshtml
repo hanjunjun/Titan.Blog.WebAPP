@@ -1,0 +1,608 @@
+﻿@*@model Swashbuckle.AspNetCore.Swagger.SwaggerDocument*@
+@using Swashbuckle.AspNetCore.Swagger;
+@*@model SwaggerDocument*@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Swagger API文档代码生成器</title>
+    <style type='text/css'>
+        table, table td, table th {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+
+        table {
+            table-layout: fixed;
+            word-break: break-all;
+        }
+
+        tr {
+            height: 20px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div style='width:1000px; margin: 0 auto'>
+        <span><i>Swagger Word文档</i></span>
+        <h1 align="center">@Model.Info.Title</h1>
+        <h1 align="center">接口文档 @Model.Info.Version</h1>
+        <h4>联系方式</h4>
+        <span>作者：@Model.Info.Contact.Name</span>
+        <br>
+        <a href="mailto:@Model.Info.Contact.Email" rel="noopener noreferrer" class="link">Send email to Titan.Blog.WebAPP</a>
+        <br>
+        <a href="@Model.Info.Contact.Url" target="_blank" rel="noopener noreferrer" class="link">@Model.Info.Contact.Name - Website</a>
+        <br>
+        <h3>接口描述</h3>
+        <span>@Model.Info.Description</span>
+        <br>
+        <h4>JWT授权</h4>
+        <table border='1' cellspacing='0' cellpadding='0' style="table-layout: fixed; word-break: break-all;border: 1px solid #000000;border-collapse: collapse;" width='100%'>
+            @{
+                var security = Model.SecurityDefinitions;
+                if (security.Count > 0)
+                {
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td align="center" style="background-color: rgb(84, 127, 177);">说明</td>
+                        <td>@security.FirstOrDefault().Value.Description</td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td align="center" style="background-color: rgb(84, 127, 177);">类型</td>
+                        <td>@security.FirstOrDefault().Value.Type</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td align="center" style="background-color: rgb(84, 127, 177);">说明</td>
+                        <td></td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td align="center" style="background-color: rgb(84, 127, 177);">类型</td>
+                        <td></td>
+                    </tr>
+                }
+            }
+
+        </table>
+        @foreach (var item in Model.Paths)
+        {
+            if (item.Value.Get != null)
+            {
+                <h3>@item.Value.Get.Summary</h3>
+                <table border='1' cellspacing='0' cellpadding='0' width='100%' style="table-layout: fixed; word-break: break-all;border: 1px solid #000000;border-collapse: collapse;">
+                    <tr style="background-color: rgb(84, 127, 177);" align="center">
+                        <td colspan='5'></td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">接口描述</td>
+                        <td colspan='4' style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px; table-layout: fixed; word-break: break-all;">
+                            @{
+                                if (item.Value.Get.Description != null)
+                                {
+                                    @:@item.Value.Get.Description.ToString()
+                                }
+                                else if (item.Value.Get.Summary != null)
+                                {
+                                    @:@item.Value.Get.Summary.ToString()
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">URL</td>
+                        <td colspan='4'>@item.Key</td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求方式</td>
+                        <td colspan='4'>
+                            Get
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Get.Consumes != null && item.Value.Get.Consumes.Count > 0)
+                            {
+                                foreach (var request in item.Value.Get.Consumes)
+                                {
+                                    @:@request
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">返回类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Get.Produces != null && item.Value.Get.Produces.Count > 0)
+                            {
+                                foreach (var result in item.Value.Get.Produces)
+                                {
+                                    @:@result
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    @if (item.Value.Get.Parameters != null && item.Value.Get.Parameters.Count > 0)
+                    {
+                        <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数名</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数类型</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">是否必填</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>说明</td>
+                        </tr>
+                        @foreach (var param in item.Value.Get.Parameters)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Name</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.In</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Required</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>@param.Description</td>
+                            </tr>
+                        }
+                    }
+
+                    <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">状态码</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>说明</td>
+                    </tr>
+                    @if (item.Value.Get.Responses != null && item.Value.Get.Responses.Count > 0)
+                    {
+                        foreach (var response in item.Value.Get.Responses)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@response.Key</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>@response.Value.Description</td>
+                            </tr>
+
+                        }
+                    }
+                    <tr style="background-color: rgb(84, 127, 177);">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='5'>示例</td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">请求参数</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">返回值</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                </table>
+                <br>
+            }
+            else if (item.Value.Post != null)
+            {
+                <h3>@item.Value.Post.Summary</h3>
+                <table border='1' cellspacing='0' cellpadding='0' width='100%' style="table-layout: fixed; word-break: break-all;border: 1px solid #000000;border-collapse: collapse;">
+                    <tr style="background-color: rgb(84, 127, 177);" align="center">
+                        <td colspan='5'></td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">接口描述</td>
+                        <td colspan='4' style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px; table-layout: fixed; word-break: break-all;">
+                            @{
+                                if (item.Value.Post.Description != null)
+                                {
+                                    @:@item.Value.Post.Description.ToString()
+                                }
+                                else if (item.Value.Post.Summary != null)
+                                {
+                                    @:@item.Value.Post.Summary.ToString()
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">URL</td>
+                        <td colspan='4'>@item.Key</td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求方式</td>
+                        <td colspan='4'>
+                            Post
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Post.Consumes != null && item.Value.Post.Consumes.Count > 0)
+                            {
+                                foreach (var request in item.Value.Post.Consumes)
+                                {
+                                    @:@request
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">返回类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Post.Produces != null && item.Value.Post.Produces.Count > 0)
+                            {
+                                foreach (var result in item.Value.Post.Produces)
+                                {
+                                    @:@result
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    @if (item.Value.Post.Parameters != null && item.Value.Post.Parameters.Count > 0)
+                    {
+                        <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数名</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数类型</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">是否必填</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>说明</td>
+                        </tr>
+                        @foreach (var param in item.Value.Post.Parameters)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Name</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.In</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Required</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>@param.Description</td>
+                            </tr>
+                        }
+                    }
+
+                    <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">状态码</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>说明</td>
+                    </tr>
+                   @if (item.Value.Post.Responses != null && item.Value.Post.Responses.Count > 0)
+                    {
+                        foreach (var response in item.Value.Post.Responses)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@response.Key</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>@response.Value.Description</td>
+                            </tr>
+
+                        }
+                    }
+
+                    <tr style="background-color: rgb(84, 127, 177);">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='5'>示例</td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">请求参数</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">返回值</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                </table>
+                <br>
+            }
+            else if (item.Value.Put != null)
+            {
+                <h3>@item.Value.Put.Summary</h3>
+                <table border='1' cellspacing='0' cellpadding='0' width='100%' style="table-layout: fixed; word-break: break-all;border: 1px solid #000000;border-collapse: collapse;">
+                    <tr style="background-color: rgb(84, 127, 177);" align="center">
+                        <td colspan='5'></td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">接口描述</td>
+                        <td colspan='4' style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px; table-layout: fixed; word-break: break-all;">
+                            @{
+                                if (item.Value.Put.Description != null)
+                                {
+                                    @:@item.Value.Put.Description.ToString()
+                                }
+                                else if (item.Value.Put.Summary != null)
+                                {
+                                    @:@item.Value.Put.Summary.ToString()
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">URL</td>
+                        <td colspan='4'>@item.Key</td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求方式</td>
+                        <td colspan='4'>
+                            Put
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Put.Consumes != null && item.Value.Put.Consumes.Count > 0)
+                            {
+                                foreach (var request in item.Value.Put.Consumes)
+                                {
+                                    @:@request
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">返回类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Put.Produces != null && item.Value.Put.Produces.Count > 0)
+                            {
+                                foreach (var result in item.Value.Put.Produces)
+                                {
+                                    @:@result
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    @if (item.Value.Put.Parameters != null && item.Value.Put.Parameters.Count > 0)
+                    {
+                        <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数名</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数类型</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">是否必填</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>说明</td>
+                        </tr>
+                        @foreach (var param in item.Value.Put.Parameters)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Name</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.In</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Required</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>@param.Description</td>
+                            </tr>
+                        }
+                    }
+
+                    <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">状态码</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>说明</td>
+                    </tr>
+                    @if (item.Value.Put.Responses != null && item.Value.Put.Responses.Count > 0)
+                    {
+                        foreach (var response in item.Value.Put.Responses)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@response.Key</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>@response.Value.Description</td>
+                            </tr>
+
+                        }
+                    }
+
+                    <tr style="background-color: rgb(84, 127, 177);">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='5'>示例</td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">请求参数</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">返回值</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                </table>
+                <br>
+            }
+            else if (item.Value.Patch != null)
+            {
+                <h3>@item.Value.Patch.Summary</h3>
+                <table border='1' cellspacing='0' cellpadding='0' width='100%' style="table-layout: fixed; word-break: break-all;border: 1px solid #000000;border-collapse: collapse;">
+                    <tr style="background-color: rgb(84, 127, 177);" align="center">
+                        <td colspan='5'></td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">接口描述</td>
+                        <td colspan='4' style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px; table-layout: fixed; word-break: break-all;">
+                            @{
+                                if (item.Value.Patch.Description != null)
+                                {
+                                    @:@item.Value.Patch.Description.ToString()
+                                }
+                                else if (item.Value.Patch.Summary != null)
+                                {
+                                    @:@item.Value.Patch.Summary.ToString()
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">URL</td>
+                        <td colspan='4'>@item.Key</td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求方式</td>
+                        <td colspan='4'>
+                            Patch
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Patch.Consumes != null && item.Value.Patch.Consumes.Count > 0)
+                            {
+                                foreach (var request in item.Value.Patch.Consumes)
+                                {
+                                    @:@request
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">返回类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Patch.Produces != null && item.Value.Patch.Produces.Count > 0)
+                            {
+                                foreach (var result in item.Value.Patch.Produces)
+                                {
+                                    @:@result
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    @if (item.Value.Patch.Parameters != null && item.Value.Patch.Parameters.Count > 0)
+                    {
+                        <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数名</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数类型</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">是否必填</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>说明</td>
+                        </tr>
+                        @foreach (var param in item.Value.Patch.Parameters)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Name</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.In</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Required</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>@param.Description</td>
+                            </tr>
+                        }
+                    }
+
+                    <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">状态码</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>说明</td>
+                    </tr>
+                    @if (item.Value.Patch.Responses != null && item.Value.Patch.Responses.Count > 0)
+                    {
+                        foreach (var response in item.Value.Patch.Responses)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@response.Key</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>@response.Value.Description</td>
+                            </tr>
+
+                        }
+                    }
+
+                    <tr style="background-color: rgb(84, 127, 177);">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='5'>示例</td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">请求参数</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">返回值</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                </table>
+                <br>
+            }
+            else if (item.Value.Delete != null)
+            {
+                <h3>@item.Value.Delete.Summary</h3>
+                <table border='1' cellspacing='0' cellpadding='0' width='100%' style="table-layout: fixed; word-break: break-all;border: 1px solid #000000;border-collapse: collapse;">
+                    <tr style="background-color: rgb(84, 127, 177);" align="center">
+                        <td colspan='5'></td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">接口描述</td>
+                        <td colspan='4' style="border: 1px solid #000000;border-collapse: collapse;height: 20px;font-size: 12px; table-layout: fixed; word-break: break-all;">
+                            @{
+                                if (item.Value.Delete.Description != null)
+                                {
+                                    @:@item.Value.Delete.Description.ToString()
+                                }
+                                else if (item.Value.Delete.Summary != null)
+                                {
+                                    @:@item.Value.Delete.Summary.ToString()
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">URL</td>
+                        <td colspan='4'>@item.Key</td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求方式</td>
+                        <td colspan='4'>
+                            Delete
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">请求类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Delete.Consumes != null && item.Value.Delete.Consumes.Count > 0)
+                            {
+                                foreach (var request in item.Value.Delete.Consumes)
+                                {
+                                    @:@request
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">返回类型</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>
+                            @if (item.Value.Delete.Produces != null && item.Value.Delete.Produces.Count > 0)
+                            {
+                                foreach (var result in item.Value.Delete.Produces)
+                                {
+                                    @:@result
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    @if (item.Value.Delete.Parameters != null && item.Value.Delete.Parameters.Count > 0)
+                    {
+                        <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数名</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">参数类型</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;">是否必填</td>
+                            <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>说明</td>
+                        </tr>
+                        @foreach (var param in item.Value.Delete.Parameters)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Name</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.In</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@param.Required</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='2'>@param.Description</td>
+                            </tr>
+                        }
+                    }
+
+                    <tr style="background-color: rgb(84, 127, 177);" align='center'>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;">状态码</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>说明</td>
+                    </tr>
+                    @if (item.Value.Delete.Responses != null && item.Value.Delete.Responses.Count > 0)
+                    {
+                        foreach (var response in item.Value.Delete.Responses)
+                        {
+                            <tr align='center' style="border: 1px solid #000000;border-collapse: collapse;">
+                                <td style="border: 1px solid #000000;border-collapse: collapse;">@response.Key</td>
+                                <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'>@response.Value.Description</td>
+                            </tr>
+
+                        }
+                    }
+
+                    <tr style="background-color: rgb(84, 127, 177);">
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='5'>示例</td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">请求参数</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                    <tr style="height: 40px;" style="border: 1px solid #000000;border-collapse: collapse;">
+                        <td style="background-color: rgb(84, 127, 177);">返回值</td>
+                        <td style="border: 1px solid #000000;border-collapse: collapse;" colspan='4'></td>
+                    </tr>
+                </table>
+                <br>
+            }
+        }
+    </div>
+</body>
+</html>

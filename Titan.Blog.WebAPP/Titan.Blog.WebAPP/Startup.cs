@@ -40,6 +40,10 @@ using Titan.Blog.Model.DataModel;
 using Titan.Blog.WebAPP.Auth.Policys;
 using Titan.RepositoryCode;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using RazorEngine.Templating;
+using RazorEngine.Configuration;
+using RazorEngine;
+using RazorEngine.Text;
 
 namespace Titan.Blog.WebAPP
 {
@@ -152,10 +156,10 @@ namespace Titan.Blog.WebAPP
                     {
                         // {ApiName} 定义成全局变量，方便修改
                         Version = version,
-                        Title = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} 接口文档",
-                        Description = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} HTTP WebAPI " + version,
+                        Title = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} WebAPI",
+                        Description = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} HTTP WebAPI " + version+"，博客系统前后端分离，后端框架。",
                         TermsOfService = "None",
-                        Contact = new Contact { Name = "Titan.Blog.WebAPP", Email = "1454055505@qq.com", Url = "http://gaobili.cn/" }
+                        Contact = new Contact { Name = "韩俊俊", Email = "1454055505@qq.com", Url = "http://gaobili.cn/" }
                     });
                 });
                 var xmlPath1 = Path.Combine(basePath, "Titan.Blog.WebAPP.xml");//这个就是刚刚配置的xml文件名
@@ -198,7 +202,7 @@ namespace Titan.Blog.WebAPP
             //读取配置文件
             var audienceConfig = Configuration.GetSection("Audience");
             var symmetricKeyAsBase64 = audienceConfig["Secret"];
-            var keyByteArray = Encoding.ASCII.GetBytes(symmetricKeyAsBase64);
+            var keyByteArray = System.Text.Encoding.ASCII.GetBytes(symmetricKeyAsBase64);
             var signingKey = new SymmetricSecurityKey(keyByteArray);
 
             // 令牌验证参数
@@ -367,6 +371,16 @@ namespace Titan.Blog.WebAPP
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider svp)
         {
+            var config = new TemplateServiceConfiguration();
+            // .. configure your instance
+
+            var service = RazorEngineService.Create(config);
+            Engine.Razor = service;
+            config.Language = Language.CSharp; // VB.NET as template language.
+            config.EncodedStringFactory = new RawStringFactory(); // Raw string encoding.
+            config.EncodedStringFactory = new HtmlEncodedStringFactory(); // Html encoding.
+            config.Debug = true;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -401,12 +415,12 @@ namespace Titan.Blog.WebAPP
                 c.DisplayOperationId();
                 c.DisplayRequestDuration();
                 c.DocExpansion(DocExpansion.None);
-                c.EnableDeepLinking();
+                //c.EnableDeepLinking();
                 //c.EnableFilter();
                 c.ShowExtensions();
 
                 // Network
-                c.EnableValidator();
+                //c.EnableValidator(null);//会导致页面右下角Error
                 //c.SupportedSubmitMethods(SubmitMethod.Get);
 
                 // Other

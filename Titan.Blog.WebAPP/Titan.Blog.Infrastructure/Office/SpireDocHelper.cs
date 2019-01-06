@@ -29,16 +29,15 @@ namespace Titan.Blog.Infrastructure.Office
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public  OpResult<Stream> SwaggerHtmlToWord(string html,out string memi,out string fileExten)
+        public  OpResult<Stream> SwaggerHtmlConvers(string html,string type,out string memi)
         {
-            fileExten = ".docx";
-            string fileName = Guid.NewGuid().ToString() + ".docx";
+            string fileName = Guid.NewGuid().ToString() + type;
             string webRootPath = _hostingEnvironment.WebRootPath;
             string path = webRootPath + @"\Files\TempFiles\";
             var addrUrl = path + $"{fileName}";
             FileStream fileStream = null;
             var provider = new FileExtensionContentTypeProvider();
-            memi = provider.Mappings[".docx"];
+            memi = provider.Mappings[type];
             try
             {
                 if (!Directory.Exists(path))
@@ -53,10 +52,38 @@ namespace Titan.Blog.Infrastructure.Office
                 //加载HTML文档
                 //document.LoadFromFile("APIDocument.html", FileFormat.Html, XHTMLValidationType.None);
                 document.LoadFromStream(stream, FileFormat.Html, XHTMLValidationType.None);
+                //document.LoadText(stream, Encoding.Default);
                 //保存为Word
-                document.SaveToFile(addrUrl, FileFormat.Docx);
+                switch (type)
+                {
+                    case ".docx":
+                        //Word
+                        document.SaveToFile(addrUrl, FileFormat.Docx);
+                        break;
+                    case ".pdf":
+                        //PDF
+                        document.SaveToFile(addrUrl, FileFormat.PDF);
+                        break;
+                    case ".html":
+                        //Html
+                        FileStream fs = new FileStream(addrUrl, FileMode.Append, FileAccess.Write, FileShare.None);//html直接写入不用spire.doc
+                        StreamWriter sw = new StreamWriter(fs); // 创建写入流
+                        sw.WriteLine(html); // 写入Hello World
+                        sw.Close(); //关闭文件
+                        fs.Close();
+                        break;
+                    case ".xml":
+                        //PDF
+                        document.SaveToFile(addrUrl, FileFormat.WordXml);
+                        break;
+                    case ".svg":
+                        //PDF
+                        document.SaveToFile(addrUrl, FileFormat.SVG);
+                        break;
+                }
+                
                 document.Close();
-                fileStream = System.IO.File.Open(addrUrl, FileMode.Open);
+                fileStream = System.IO.File.Open(addrUrl, FileMode.OpenOrCreate);
                 var filedata = ByteHelper.StreamToBytes(fileStream);
                 var outdata = ByteHelper.BytesToStream(filedata);
                 return new OpResult<Stream>(OpResultType.Success,"转换成功！", outdata);

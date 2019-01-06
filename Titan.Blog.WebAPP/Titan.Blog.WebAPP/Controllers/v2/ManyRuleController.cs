@@ -18,6 +18,11 @@ namespace Titan.Blog.WebAPP.Controllers.v2
     [Authorize("Permission")]
     public class ManyRuleController:ApiControllerBase
     {
+        /// <summary>
+        /// FromForm 提交
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost("PostForm", Name = "PostForm")]
         public OpResult<string> PostForm([FromForm]RegistrationForm form)
         {

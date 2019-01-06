@@ -23,9 +23,11 @@
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="RazorEngine.NetCore" Version="2.2.2" />
     <PackageReference Include="RestSharp" Version="106.6.3" />
     <PackageReference Include="Spire.Doc" Version="7.1.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.519" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -140,21 +140,11 @@ namespace Titan.Blog.WebAPP
             var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
             services.AddSwaggerGen(c =>
             {
-                //c.SwaggerDoc("v1", new Info
-                //{
-                //    Version = "v0.1.0",
-                //    Title = "Blog.Core API",
-                //    Description = "框架说明文档",
-                //    TermsOfService = "None",
-                //    Contact = new Swashbuckle.AspNetCore.Swagger.Contact { Name = "Blog.Core", Email = "Blog.Core@xxx.com", Url = "https://www.jianshu.com/u/94102b59cc2a" }
-                //});
-
                 //遍历出全部的版本，做文档信息展示
                 typeof(CustomApiVersion.ApiVersions).GetEnumNames().ToList().ForEach(version =>
                 {
                     c.SwaggerDoc(version, new Info
                     {
-                        // {ApiName} 定义成全局变量，方便修改
                         Version = version,
                         Title = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} WebAPI",
                         Description = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} HTTP WebAPI " + version+"，博客系统前后端分离，后端框架。",
@@ -426,12 +416,12 @@ namespace Titan.Blog.WebAPP
                 // Other
                 c.DocumentTitle = "Titan.Blog.API 在线文档调试";
                 //css注入
-                c.InjectStylesheet("/swagger-common.css");
-                c.InjectStylesheet("/buzyload/app.min.css");
+                c.InjectStylesheet("/swagger-common.css");//自定义样式
+                c.InjectStylesheet("/buzyload/app.min.css");//等待load遮罩层样式
                 //js注入
-                c.InjectJavascript("/jquery/jquery.js");
-                c.InjectJavascript("/buzyload/app.min.js");
-                c.InjectJavascript("/swagger-lang.js");
+                c.InjectJavascript("/jquery/jquery.js");//jquery 插件
+                c.InjectJavascript("/buzyload/app.min.js");//loading 遮罩层js
+                c.InjectJavascript("/swagger-lang.js");//我们自定义的js
 
                 
             });

@@ -36,7 +36,7 @@ namespace Titan.Blog.WebAPP.Controllers.v1
         /// 获取博客列表
         /// </summary>
         /// <returns></returns>
-        [HttpGet("Test", Name = "Test")]
+        [HttpGet("ZArrayTest")]
         public OpResult<List<object>> BlogList()
         {
             var userInfo = UserInfo;

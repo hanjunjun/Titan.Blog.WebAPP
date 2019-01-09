@@ -44,7 +44,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         /// <img src="https://yuml.me/diagram/class/%5BSupplier%7Bbg:orange%7D%5D,%5BSupplier%5D-0..1%3E%5BAddress%5D,%5BSupplier%5D" />
         /// <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot" />
         /// </remarks>
-        [HttpPost("ZArrayTest", Name = "ZArrayTest")]
+        [HttpPost("ZArrayTest")]
         public OpResult<List<object>> BlogList([FromBody]List<string> arrayStr)
         {
             var userInfo = UserInfo;

@@ -79,4 +79,6 @@ ASP.NET Core 2.2 前后端分离、后端框架，这个项目本人会长期维
 	7.短信接口
 	8.微信集成
 	9.开源项目分支：EF Core POCO 代码生成器，使用RazorEngine MVC模板引擎实现，支持DBFirst和CodeFirst
-	目前就想到这么多。
+	10.内置任务调度服务
+	11.内置消息推送服务
+	

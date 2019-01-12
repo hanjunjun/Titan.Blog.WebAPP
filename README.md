@@ -3,7 +3,7 @@ ASP.NET Core 2.2 前后端分离、后端框架，这个项目本人会长期维
 
 # Demo 演示地址：http://gaobili.cn:8600/swagger/index.html
 
-# 博客园地址：https://www.cnblogs.com/hjjblog
+# 博客园地址：https://www.cnblogs.com/hanjunjun-blog
 
 ![Logo](https://github.com/HanJunJun/Titan.Blog.WebAPP/blob/master/Titan.Blog.WebAPP/Titan.Blog.WebAPP/wwwroot/demo.png)
 

@@ -49,7 +49,7 @@ ASP.NET Core 2.2 前后端分离、后端框架，这个项目本人会长期维
 	  
 	数据库相关：
 		
-	  * AOP缓存 （待开发）
+	  * AOP缓存
 	
 	  * Repository + DomainService 仓储模式编程、IRepository + IDomainService解耦 （可以动态替换掉ORM 待开发）
 	  
@@ -76,7 +76,7 @@ ASP.NET Core 2.2 前后端分离、后端框架，这个项目本人会长期维
 	3.接口加频率限制，超出频率提示验证码。
 	4.IP黑名单过滤。
 	5.EF Core 仓储模式重构。
-	6.AOP缓存实现
+	6.AOP缓存实现  --2019-01-21 已完成
 	7.短信接口
 	8.微信集成
 	9.开源项目分支：EF Core POCO 代码生成器，使用RazorEngine MVC模板引擎实现，支持DBFirst和CodeFirst

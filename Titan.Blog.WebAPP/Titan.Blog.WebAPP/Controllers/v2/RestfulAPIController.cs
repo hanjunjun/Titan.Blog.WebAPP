@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Titan.Blog.AppService.DomainService;
+using Titan.Blog.AppService.ModelDTO;
+using Titan.Blog.AppService.ModelService;
 using Titan.Blog.Infrastructure.Data;
 using Titan.Blog.Model.CommonModel;
 using Titan.Blog.WebAPP.Extensions;
@@ -17,9 +20,11 @@ namespace Titan.Blog.WebAPP.Controllers.v2
     public class RestfulAPIController : ApiControllerBase
     {
         #region 成员、构造函数注入
-        public RestfulAPIController()
-        {
 
+        private readonly AuthorDomainSvc _authorDomainSvc;
+        public RestfulAPIController(AuthorDomainSvc authorDomainSvc)
+        {
+            _authorDomainSvc = authorDomainSvc;
         }
         #endregion
 
@@ -69,16 +74,12 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         /// <summary>
         /// 查询所有用户
         /// </summary>
-        /// <param name="userModel">用户模型</param>
         /// <returns></returns>
         [HttpGet(Name = "GetUser")]
-        public OpResult<List<string>> GetUser()
+        public OpResult<List<SysUserDto>> GetUser()
         {
-            var list = new List<string>();
-            list.Add("张三");
-            list.Add("李四");
-            list.Add("王二");
-            return new OpResult<List<string>>(OpResultType.Success, "获取数据成功！",list);
+            var data = _authorDomainSvc.GetSysUserListDto();
+            return new OpResult<List<SysUserDto>>(OpResultType.Success, "获取数据成功！", data);
         }
 
         /// <summary>

@@ -16,6 +16,7 @@ namespace Blog.Core.AutoMapper
         public CustomProfile()
         {
             CreateMap<SysRoleModuleButton, SysRoleModuleButtonDto>();
+            CreateMap<SysUser, SysUserDto>();
         }
     }
 }

@@ -1,10 +1,7 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.Extensions.Caching.Memory;
 
-namespace Titan.Blog.Infrastructure.AOP
+namespace Titan.Blog.WebAPP.AOP
 {
     /// <summary>
     /// 实例化缓存接口ICaching

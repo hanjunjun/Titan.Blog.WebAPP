@@ -16,7 +16,7 @@ namespace Titan.Blog.Infrastructure.Redis
        /// <returns></returns>
         TEntity Get<TEntity>(string key);
         //设置
-        void Set(string key, object value, TimeSpan cacheTime);
+        void Set(string key, object value, int addMinute);
         //判断是否存在
         bool Get(string key);
         //移除

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Titan.Blog.AppService.ModelDTO;
 using Titan.Blog.AppService.ModelService;
+using Titan.Blog.Infrastructure.Attribute;
 using Titan.Blog.Infrastructure.Data;
 using Titan.Blog.Model.DataModel;
 using Titan.Infrastructure.Domain;
@@ -19,10 +20,15 @@ namespace Titan.Blog.AppService.DomainService
     {
         private ModelRespositoryFactory<SysRoleModuleButton, Guid> _modelSvc;
         private ModelRespositoryFactory<SysRole, Guid> _modelRole;
-        public AuthorDomainSvc( ModelRespositoryFactory<SysRoleModuleButton, Guid> modelSvc, ModelRespositoryFactory<SysRole, Guid> modelRole)
+        private readonly SysUserSvc _sysUserSvc;
+        private readonly MainSvc _mainSvc;
+        public AuthorDomainSvc( ModelRespositoryFactory<SysRoleModuleButton, Guid> modelSvc, ModelRespositoryFactory<SysRole, Guid> modelRole,
+            SysUserSvc sysUserSvc, MainSvc mainSvc)
         {
             _modelSvc = modelSvc;
             _modelRole = modelRole;
+            _sysUserSvc = sysUserSvc;
+            _mainSvc = mainSvc;
         }
 
         //public List<Author> GetList()
@@ -42,27 +48,37 @@ namespace Titan.Blog.AppService.DomainService
             return _modelSvc.context.Database.ExecuteSqlCommand("INSERT INTO [TestDB].[dbo].[Author] ([Id], [AuthorName], [PKId]) VALUES ('1', '管理员', newid());");
         }
 
+        public List<SysUserDto> GetSysUserListDto()
+        {
+            var data = _mainSvc.FindModelByValue(x=>true);
+            var first = data.FirstOrDefault().Children;//获取外键表数据
+            return _sysUserSvc.FindModelByValue(x => true).MapToList<SysUser, SysUserDto>();
+        }
+
         /// <summary>
         /// 获取系统中所有的权限
         /// </summary>
         /// <returns></returns>
-        public List<SysRoleModuleButtonDto> GeRoleModule()
+        [Caching(AbsoluteExpiration=10)]
+        public async virtual Task<List<SysRoleModuleButtonDto>> GeRoleModule()
         {
-
-            var roleModuleButton = _modelSvc.GetDatasNoTracking(x => x.ModuleType == 0).ToList().MapToList<SysRoleModuleButton, SysRoleModuleButtonDto>();//
-            if (roleModuleButton.Count > 0)
+            return await Task.Run(() =>
             {
-                foreach (var item in roleModuleButton)
+                var roleModuleButton = _modelSvc.GetDatasNoTracking(x => x.ModuleType == 0).ToList().MapToList<SysRoleModuleButton, SysRoleModuleButtonDto>();//
+                if (roleModuleButton.Count > 0)
                 {
-                    item.SysRole = _modelSvc.context.Set<SysRole>().FromSql("select * from SysRole where SysRoleId={0} and IsDelete!=1 and RoleStatus=1", item.SysRoleId).FirstOrDefault();
-                    item.SysModule = _modelSvc.context.Set<SysModule>().FromSql("select * from SysModule where SysModuleId={0} and ModuleStatus=1 and IsDelete!=1", item.SysModuleId).FirstOrDefault();
-                }
+                    foreach (var item in roleModuleButton)
+                    {
+                        item.SysRole = _modelSvc.context.Set<SysRole>().FromSql("select * from SysRole where SysRoleId={0} and IsDelete!=1 and RoleStatus=1", item.SysRoleId).FirstOrDefault();
+                        item.SysModule = _modelSvc.context.Set<SysModule>().FromSql("select * from SysModule where SysModuleId={0} and ModuleStatus=1 and IsDelete!=1", item.SysModuleId).FirstOrDefault();
+                    }
 
-            }
-            return roleModuleButton;
+                }
+                return roleModuleButton;
+            });
         }
 
-        public OpResult<string> VerifyUserInfo(string userId,string userPwd,out SysUser sysUser)
+        public virtual OpResult<string> VerifyUserInfo(string userId,string userPwd,out SysUser sysUser)
         {
             var userInfo = _modelSvc.context.Set<SysUser>().FromSql("select * from SysUser where UserId={0} and UserPwd={1} and UserStatus=1", userId,userPwd).FirstOrDefault();//验证用户id和密码
             sysUser = userInfo;

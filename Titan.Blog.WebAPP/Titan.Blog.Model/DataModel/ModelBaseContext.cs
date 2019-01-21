@@ -1,20 +1,20 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
 namespace Titan.Blog.Model.DataModel
 {
     public partial class ModelBaseContext : DbContext
     {
-        public ModelBaseContext()
-        {
-        }
-
         public ModelBaseContext(DbContextOptions<ModelBaseContext> options)
             : base(options)
         {
         }
 
+        public virtual DbSet<Children> Children { get; set; }
+        public virtual DbSet<Main> Main { get; set; }
         public virtual DbSet<SysButton> SysButton { get; set; }
         public virtual DbSet<SysModule> SysModule { get; set; }
         public virtual DbSet<SysOperateLog> SysOperateLog { get; set; }
@@ -25,16 +25,58 @@ namespace Titan.Blog.Model.DataModel
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=112.74.51.95;Initial Catalog=TestDB;User ID=sa;Password=Hanhongwei123!;MultipleActiveResultSets=true");
-            }
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+            //启用EF延迟加载
+            optionsBuilder.UseLazyLoadingProxies().UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
+
+            modelBuilder.Entity<Children>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.MainId).HasColumnName("mainId");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Sex)
+                    .HasColumnName("sex")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Main)
+                    .WithMany(p => p.Children)
+                    .HasForeignKey(d => d.MainId)
+                    .HasConstraintName("FK_children_Main");
+            });
+
+            modelBuilder.Entity<Main>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Telphone)
+                    .HasColumnName("telphone")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+            });
 
             modelBuilder.Entity<SysButton>(entity =>
             {

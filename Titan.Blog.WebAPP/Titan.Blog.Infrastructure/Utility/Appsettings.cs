@@ -26,21 +26,13 @@ namespace Titan.Blog.Infrastructure.Utility
         /// <returns></returns>
         public static string app(params string[] sections)
         {
-            try
+            var val = string.Empty;
+            for (int i = 0; i < sections.Length; i++)
             {
-                var val = string.Empty;
-                for (int i = 0; i < sections.Length; i++)
-                {
-                    val += sections[i] + ":";
-                }
-
-                return Configuration[val.TrimEnd(':')];
-            }
-            catch (Exception)
-            {
-                return "";
+                val += sections[i] + ":";
             }
 
+            return Configuration[val.TrimEnd(':')];
         }
     }
 }

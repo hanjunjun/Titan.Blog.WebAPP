@@ -1,11 +1,9 @@
-﻿using Castle.DynamicProxy;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using Castle.DynamicProxy;
 
-namespace Titan.Blog.Infrastructure.AOP
+namespace Titan.Blog.WebAPP.AOP
 {
     /// <summary>
     /// 拦截器BlogLogAOP 继承IInterceptor接口

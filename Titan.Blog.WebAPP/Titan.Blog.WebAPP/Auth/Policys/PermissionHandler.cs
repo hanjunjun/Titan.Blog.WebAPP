@@ -39,7 +39,7 @@ namespace Titan.Blog.WebAPP.Auth.Policys
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
         {
             // 将最新的角色和接口列表更新
-            var data = _authorDomainSvc.GeRoleModule();
+            var data = await _authorDomainSvc.GeRoleModule();
             var list = (from item in data
                         select new Permission
                         {

@@ -1,13 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Auth\**" />
+    <Compile Remove="EFCoreExtenions\**" />
+    <Compile Remove="NPOI\**" />
     <EmbeddedResource Remove="Auth\**" />
+    <EmbeddedResource Remove="EFCoreExtenions\**" />
+    <EmbeddedResource Remove="NPOI\**" />
     <None Remove="Auth\**" />
+    <None Remove="EFCoreExtenions\**" />
+    <None Remove="NPOI\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,18 +27,12 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="RazorEngine.NetCore" Version="2.2.2" />
-    <PackageReference Include="RestSharp" Version="106.6.3" />
+    <PackageReference Include="RestSharp" Version="106.6.7" />
     <PackageReference Include="Spire.Doc" Version="7.1.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.519" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="EFCoreExtenions\" />
-    <Folder Include="NPOI\" />
   </ItemGroup>
 
 </Project>

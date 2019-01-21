@@ -27,7 +27,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using Titan.Blog.Infrastructure.AOP;
 using Titan.Blog.Infrastructure.HttpExtenions;
 using Titan.Blog.Infrastructure.Log;
 using Titan.Blog.Infrastructure.Redis;
@@ -44,6 +43,7 @@ using RazorEngine.Templating;
 using RazorEngine.Configuration;
 using RazorEngine;
 using RazorEngine.Text;
+using Titan.Blog.WebAPP.AOP;
 
 namespace Titan.Blog.WebAPP
 {
@@ -74,14 +74,17 @@ namespace Titan.Blog.WebAPP
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //services.AddScoped<AuthorDomainSvc>().AddScoped<AuthorSvc>().AddScoped<ModelRespositoryFactory<Author, Guid>>();
-            #region EF Core
+            #region EF Core 注释了，改成从配置文件获取了。
             //注入上下文对象
-            services.AddDbContext<ModelBaseContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<ModelBaseContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddScoped(p => new ModelBaseContext(p.GetService<DbContextOptions<ModelBaseContext>>()));
             #endregion
 
             #region 全局异常捕获
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore) //忽略在对象图中找到的循环引用
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             #endregion
 
             #region Redis缓存
@@ -302,6 +305,8 @@ namespace Titan.Blog.WebAPP
             // ※※★※※ 因为解耦，bin文件夹没有以下两个dll文件，会报错，所以先编译生成这两个dll ※※★※※
             builder.RegisterType<ModelRespositoryFactory<SysRoleModuleButton, Guid>>();
             builder.RegisterType<ModelRespositoryFactory<SysRole, Guid>>();
+            builder.RegisterType<ModelRespositoryFactory<SysUser, Guid>>();
+            builder.RegisterType<ModelRespositoryFactory<Main, Guid>>();
             var repositoryDllFile = Path.Combine(basePath, "Titan.Blog.Repository.dll");
             //var assemblysRepository = Assembly.LoadFile(repositoryDllFile);//Assembly.Load("Titan.Blog.Repository");
             var assemblysRepository = Assembly.Load("Titan.Blog.Repository");
@@ -310,7 +315,10 @@ namespace Titan.Blog.WebAPP
             var servicesDllFile = Path.Combine(basePath, "Titan.Blog.AppService.dll");//获取项目绝对路径
             //var assemblysServices = Assembly.LoadFile(servicesDllFile);// Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
              var assemblysServices =  Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
-            builder.RegisterAssemblyTypes(assemblysServices);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
+            builder.RegisterAssemblyTypes(assemblysServices)
+                .EnableClassInterceptors()
+                // 如果你想注入两个，就这么写  InterceptedBy(typeof(BlogCacheAOP), typeof(BlogLogAOP));
+                .InterceptedBy(typeof(BlogCacheAOP));//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
 
             var assemblysModel = Assembly.Load("Titan.Blog.Model");//直接采用加载文件的方法
             builder.RegisterAssemblyTypes(assemblysModel);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -13,22 +13,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ModelOtherService\**" />
+    <EmbeddedResource Remove="ModelOtherService\**" />
+    <None Remove="ModelOtherService\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Titan.Blog.AppService.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Titan.Blog.Infrastructure\Titan.Blog.Infrastructure.csproj" />
     <ProjectReference Include="..\Titan.Blog.Model\Titan.Blog.Model.csproj" />
     <ProjectReference Include="..\Titan.Blog.Repository\Titan.Blog.Repository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ModelOtherService\" />
   </ItemGroup>
 
 </Project>

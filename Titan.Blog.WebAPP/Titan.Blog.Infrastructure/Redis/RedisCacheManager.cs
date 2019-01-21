@@ -116,18 +116,19 @@ namespace Titan.Blog.Infrastructure.Redis
         {
             redisConnection.GetDatabase().KeyDelete(key);
         }
+
         /// <summary>
         /// 设置
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="cacheTime"></param>
-        public void Set(string key, object value, TimeSpan cacheTime)
+        /// <param name="key">key</param>
+        /// <param name="value">value</param>
+        /// <param name="addMinute">缓存多少分钟之后过期</param>
+        public void Set(string key, object value, int addMinute)
         {
             if (value != null)
             {
                 //序列化，将object值生成RedisValue
-                redisConnection.GetDatabase().StringSet(key, JsonHelper.ModelToBytes(value), cacheTime);
+                redisConnection.GetDatabase().StringSet(key, JsonHelper.ModelToBytes(value), TimeSpan.FromMinutes(addMinute));
             }
         }
 

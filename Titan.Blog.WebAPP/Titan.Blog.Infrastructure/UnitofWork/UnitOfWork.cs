@@ -1,23 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Transactions;
-using Titan.Model;
+using Titan.Blog.Model;
 
 namespace Titan.Infrastructure.UnitofWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private Dictionary<IAggregateRoot, IUnitOfWorkRepository> addedEntities;
-        private Dictionary<IAggregateRoot, IUnitOfWorkRepository> changedEntities;
-        private Dictionary<IAggregateRoot, IUnitOfWorkRepository> deletedEntities;
+        private Dictionary<AggregateRoot, IUnitOfWorkRepository> addedEntities;
+        private Dictionary<AggregateRoot, IUnitOfWorkRepository> changedEntities;
+        private Dictionary<AggregateRoot, IUnitOfWorkRepository> deletedEntities;
 
         public UnitOfWork()
         {
-            addedEntities = new Dictionary<IAggregateRoot, IUnitOfWorkRepository>();
-            changedEntities = new Dictionary<IAggregateRoot, IUnitOfWorkRepository>();
-            deletedEntities = new Dictionary<IAggregateRoot, IUnitOfWorkRepository>();
+            addedEntities = new Dictionary<AggregateRoot, IUnitOfWorkRepository>();
+            changedEntities = new Dictionary<AggregateRoot, IUnitOfWorkRepository>();
+            deletedEntities = new Dictionary<AggregateRoot, IUnitOfWorkRepository>();
         }
 
-        public void RegisterAmended(IAggregateRoot entity,
+        public void RegisterAmended(AggregateRoot entity,
                                     IUnitOfWorkRepository unitofWorkRepository)
         {
             if (!changedEntities.ContainsKey(entity))
@@ -26,7 +26,7 @@ namespace Titan.Infrastructure.UnitofWork
             }
         }
 
-        public void RegisterNew(IAggregateRoot entity,
+        public void RegisterNew(AggregateRoot entity,
                                 IUnitOfWorkRepository unitofWorkRepository)
         {
             if (!addedEntities.ContainsKey(entity))
@@ -35,7 +35,7 @@ namespace Titan.Infrastructure.UnitofWork
             };
         }
 
-        public void RegisterRemoved(IAggregateRoot entity,
+        public void RegisterRemoved(AggregateRoot entity,
                                     IUnitOfWorkRepository unitofWorkRepository)
         {
             if (!deletedEntities.ContainsKey(entity))
@@ -48,17 +48,17 @@ namespace Titan.Infrastructure.UnitofWork
         {
             using (TransactionScope scope = new TransactionScope())
             {
-                foreach (IAggregateRoot entity in this.addedEntities.Keys)
+                foreach (AggregateRoot entity in this.addedEntities.Keys)
                 {
                     this.addedEntities[entity].PersistCreationOf(entity);
                 }
 
-                foreach (IAggregateRoot entity in this.changedEntities.Keys)
+                foreach (AggregateRoot entity in this.changedEntities.Keys)
                 {
                     this.changedEntities[entity].PersistUpdateOf(entity);
                 }
 
-                foreach (IAggregateRoot entity in this.deletedEntities.Keys)
+                foreach (AggregateRoot entity in this.deletedEntities.Keys)
                 {
                     this.deletedEntities[entity].PersistDeletionOf(entity);
                 }

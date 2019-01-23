@@ -13,15 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ViewModel\**" />
-    <EmbeddedResource Remove="ViewModel\**" />
-    <None Remove="ViewModel\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="CommonModel\BasicAuthScheme.cs" />
     <Compile Remove="CommonModel\ISwaggerProvider.cs" />
     <Compile Remove="DataModel\DataExtensions.cs" />
+    <Compile Remove="DataModel\DataTable.cs" />
+    <Compile Remove="DataModel\DataTableContextback.cs" />
+    <Compile Remove="DataModel\ModelBaseContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +30,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTOModel\" />
+    <Folder Include="ViewModel\" />
   </ItemGroup>
 
 </Project>

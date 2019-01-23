@@ -37,15 +37,15 @@ namespace Titan.Blog.AppService.DomainService
         //    //return new List<Author>();
         //}
 
-        public List<Author> SqlTest()
-        {
-            return _modelSvc.context.Set<Author>().FromSql("select * from Author").ToList();
+        //public List<Author> SqlTest()
+        //{
+        //    return _modelSvc.context.Set<Author>().FromSql("select * from Author").ToList();
 
-        }
+        //}
 
         public int CommandSql()
         {
-            return _modelSvc.context.Database.ExecuteSqlCommand("INSERT INTO [TestDB].[dbo].[Author] ([Id], [AuthorName], [PKId]) VALUES ('1', '管理员', newid());");
+            return _modelSvc._context.Database.ExecuteSqlCommand("INSERT INTO [TestDB].[dbo].[Author] ([Id], [AuthorName], [PKId]) VALUES ('1', '管理员', newid());");
         }
 
         public List<SysUserDto> GetSysUserListDto()
@@ -64,7 +64,7 @@ namespace Titan.Blog.AppService.DomainService
         {
             return await Task.Run(() =>
             {
-                var roleModuleButton = _modelSvc.GetDatasNoTracking(x => x.ModuleType == 0).ToList().MapToList<SysRoleModuleButton, SysRoleModuleButtonDto>();//
+                var roleModuleButton = _modelSvc.GetDataAsNoTracking(x => x.ModuleType == 0).ToList().MapToList<SysRoleModuleButton, SysRoleModuleButtonDto>();//
                 if (roleModuleButton.Count > 0)
                 {
                     foreach (var item in roleModuleButton)
@@ -85,7 +85,7 @@ namespace Titan.Blog.AppService.DomainService
             if (userInfo != null)
             {
                 var roleList= _modelSvc.context.Set<SysUserRole>().FromSql("SELECT * from SysUserRole where SysUserId={0}", userInfo.SysUserId).ToList().Select(x=>x.SysRoleId).ToList();//获取用户角色
-                var roleNameList = _modelRole.GetDatasNoTracking(x=> roleList.Contains(x.SysRoleId) && x.IsDelete!=true && x.RoleStatus==true).Select(x=>x.RoleName).ToList();//获取用户角色名称
+                var roleNameList = _modelRole.GetDataAsNoTracking(x=> roleList.Contains(x.SysRoleId) && x.IsDelete!=true && x.RoleStatus==true).Select(x=>x.RoleName).ToList();//获取用户角色名称
                 var roleName = string.Join(',', roleNameList);
                 return new OpResult<string>(OpResultType.Success, roleName);
             }

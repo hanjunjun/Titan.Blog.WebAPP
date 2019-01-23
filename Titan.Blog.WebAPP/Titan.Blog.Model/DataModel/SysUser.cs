@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Titan.Model;
 
 namespace Titan.Blog.Model.DataModel
 {
-    public partial class SysUser : IAggregateRoot
+    public partial class SysUser : AggregateRoot
     {
         public Guid SysUserId { get; set; }
         public string UserId { get; set; }

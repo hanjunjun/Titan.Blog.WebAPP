@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Titan.Blog.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Titan.Blog.CodeTool", "Titan.Blog.CodeTool\Titan.Blog.CodeTool.csproj", "{5D896C07-FF7A-47B7-A193-B63CF1C1139C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Titan.Blog.IRepository", "Titan.Blog.IRepository\Titan.Blog.IRepository.csproj", "{3BD51913-6FCF-474B-A33E-9FEA8937B9D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Titan.Blog.IAppService", "Titan.Blog.IAppService\Titan.Blog.IAppService.csproj", "{C59103EA-42E9-4801-806C-3B0066D30A78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{5D896C07-FF7A-47B7-A193-B63CF1C1139C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D896C07-FF7A-47B7-A193-B63CF1C1139C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D896C07-FF7A-47B7-A193-B63CF1C1139C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BD51913-6FCF-474B-A33E-9FEA8937B9D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BD51913-6FCF-474B-A33E-9FEA8937B9D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BD51913-6FCF-474B-A33E-9FEA8937B9D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BD51913-6FCF-474B-A33E-9FEA8937B9D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C59103EA-42E9-4801-806C-3B0066D30A78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C59103EA-42E9-4801-806C-3B0066D30A78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C59103EA-42E9-4801-806C-3B0066D30A78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C59103EA-42E9-4801-806C-3B0066D30A78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

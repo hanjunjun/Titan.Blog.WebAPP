@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Titan.Model;
 
 namespace Titan.Blog.Model.DataModel
 {
-    public partial class SysModule : IAggregateRoot
+    public partial class SysModule : AggregateRoot
     {
         public Guid SysModuleId { get; set; }
         public string ModuleName { get; set; }

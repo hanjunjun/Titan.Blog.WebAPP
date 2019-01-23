@@ -9,11 +9,11 @@
  * Copyright (c) 2016 Titan.Han . All Rights Reserved. 
  * ***********************************************************************/
 
-using Titan.Model;
+using Titan.Blog.Model;
 
 namespace Infrastructure.Domain
 {
-    public interface IRepository<T, TId> : IReadOnlyRepository<T, TId> where T : IAggregateRoot
+    public interface IRepository<T, TId> : IReadOnlyRepository<T, TId> where T : AggregateRoot
     {
         /// <summary>
         /// 保存对象

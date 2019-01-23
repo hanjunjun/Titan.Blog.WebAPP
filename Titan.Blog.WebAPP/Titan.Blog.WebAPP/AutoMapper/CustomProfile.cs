@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Titan.Blog.AppService.ModelDTO;
 using Titan.Blog.Model.DataModel;
 
 namespace Blog.Core.AutoMapper
@@ -15,8 +14,8 @@ namespace Blog.Core.AutoMapper
         /// </summary>
         public CustomProfile()
         {
-            CreateMap<SysRoleModuleButton, SysRoleModuleButtonDto>();
-            CreateMap<SysUser, SysUserDto>();
+            //CreateMap<SysRoleModuleButton, SysRoleModuleButtonDto>();
+            //CreateMap<SysUser, SysUserDto>();
         }
     }
 }

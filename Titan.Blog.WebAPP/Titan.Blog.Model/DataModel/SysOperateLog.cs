@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Titan.Model;
 
 namespace Titan.Blog.Model.DataModel
 {
-    public partial class SysOperateLog : IAggregateRoot
+    public partial class SysOperateLog : AggregateRoot
     {
         public Guid SysOperateLogId { get; set; }
         public string Controller { get; set; }

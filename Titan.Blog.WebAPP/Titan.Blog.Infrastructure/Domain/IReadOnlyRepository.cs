@@ -11,50 +11,39 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Titan.Model;
+using Titan.Blog.Model;
 
 namespace Infrastructure.Domain
 {
-    public interface IReadOnlyRepository<T, TId> where T : IAggregateRoot
+    public interface IReadOnlyRepository<T, TId> where T : AggregateRoot
     {
         /// <summary>
         /// 根据主键查询
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">主键</param>
+        /// <returns>集合</returns>
         T FindById(TId id);
+
         /// <summary>
-        /// 查询所有数据
+        /// 查询<see cref="T"/>的所有数据
         /// </summary>
-        /// <returns></returns>
+        /// <returns>集合</returns>
         IEnumerable<T> FindAll();
+
         /// <summary>
-        /// 参数查询
+        /// 分页查询<see cref="T"/>>的所有数据
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        IEnumerable<T> FindAll(int index, int count);
+        /// <param name="pageIndex">页面索引</param>
+        /// <param name="pageSize">页面大小</param>
+        /// <returns>集合</returns>
+        IEnumerable<T> FindAll(int pageIndex, int pageSize);
+
         /// <summary>
-        /// 参数查询
+        /// 根据条件查询
         /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        //IEnumerable<T> FindBy(string query);
-        ///// <summary>
-        ///// 参数查询
-        ///// </summary>
-        ///// <param name="query"></param>
-        ///// <param name="index"></param>
-        ///// <param name="count"></param>
-        ///// <returns></returns>
-        //IEnumerable<T> FindBy(string query, int index, int count);
-        /// <summary>
-        /// 获取对象集合
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        IList<T> GetDatas(Expression<Func<T, bool>> predicate);
+        /// <param name="predicate">lambda条件</param>
+        /// <returns>集合</returns>
+        IList<T> GetDataByValue(Expression<Func<T, bool>> predicate);
 
     }
 }

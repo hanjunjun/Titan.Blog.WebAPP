@@ -10,11 +10,9 @@
  * ***********************************************************************/
 
 using Microsoft.EntityFrameworkCore;
-using Titan.Blog.Model.DataModel;
-using Titan.Model.DataModel;
 using Titan.RepositoryCode.DataContextStorage;
 
-namespace Titan.RepositoryCode
+namespace Titan.Blog.Repository.EFCore
 {
     public class DataContextFactory
     {
@@ -29,7 +27,8 @@ namespace Titan.RepositoryCode
             ModelBaseContext libraryDataContext = _dataContextStorageContainer.GetDataContext();
             if (libraryDataContext == null)
             {
-                libraryDataContext = new ModelBaseContext(new DbContextOptions<ModelBaseContext>());
+                //libraryDataContext = new ModelBaseContext(new DbContextOptions<ModelBaseContext>());
+                libraryDataContext = new ModelBaseContext();
                 _dataContextStorageContainer.Store(libraryDataContext);
             }
 

@@ -15,12 +15,14 @@ using Titan.Blog.Model.DataModel;
 using Titan.Model;
 using Titan.Model.DataModel;
 using Titan.RepositoryCode;
+using Titan.RepositoryCode.Respositorys;
 
 namespace Titan.Blog.AppService.ModelService
 {
     public class MainSvc
     {
 		private ModelRespositoryFactory<Main, Guid> _modeSvc;
+        //private RespositoryBase<Main, Guid> _fds;
         public MainSvc(ModelRespositoryFactory<Main, Guid> modeSvc)
         {
             _modeSvc = modeSvc;

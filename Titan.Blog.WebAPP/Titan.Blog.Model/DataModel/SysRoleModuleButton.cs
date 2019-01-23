@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Titan.Model;
 
 namespace Titan.Blog.Model.DataModel
 {
-    public partial class SysRoleModuleButton : IAggregateRoot
+    public partial class SysRoleModuleButton : AggregateRoot
     {
         public Guid SysRoleModuleButtonId { get; set; }
         public Guid? SysRoleId { get; set; }

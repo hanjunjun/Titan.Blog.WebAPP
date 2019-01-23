@@ -21,6 +21,7 @@
 // TargetFrameworkVersion = 4.5
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Titan.Blog.Model;
 
 #pragma warning disable 1591    //  Ignore "Missing XML Comment" warning
 namespace Titan.Model.DataModel
@@ -40,7 +41,7 @@ namespace Titan.Model.DataModel
     ///</summary>
     [Table("Author")]
     [System.CodeDom.Compiler.GeneratedCode("EF.Reverse.POCO.Generator", "2.30.0.0")]
-    public class Author : IAggregateRoot
+    public class Author : AggregateRoot
     {
         public Guid PKId { get; set; }
         public int Id { get; set; }
@@ -52,7 +53,7 @@ namespace Titan.Model.DataModel
 
     [Table("Children")]
     [System.CodeDom.Compiler.GeneratedCode("EF.Reverse.POCO.Generator", "2.30.0.0")]
-    public class Children : IAggregateRoot
+    public class Children : AggregateRoot
     {
         public Guid id { get; set; }
         public Guid childrenid { get; set; }

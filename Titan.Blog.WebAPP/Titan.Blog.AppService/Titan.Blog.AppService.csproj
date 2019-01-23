@@ -6,6 +6,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\HanJunJun\辅助项目\Code\C#\前后端分离框架 For .Net Core\Titan.Blog.WebAPP\Titan.Blog.AppService\Titan.Blog.AppService.xml</DocumentationFile>
+    <OutputPath>C:\HanJunJun\辅助项目\Code\C#\前后端分离框架 For .Net Core\Titan.Blog.WebAPP\Titan.Blog.WebAPP\bin\Debug\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -19,6 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="DomainService\AuthorDomainSvc.cs" />
+    <Compile Remove="ModelService\MainSvc.cs" />
+    <Compile Remove="ModelService\SysUserSvc.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Titan.Blog.AppService.xml" />
   </ItemGroup>
 
@@ -28,9 +35,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Titan.Blog.IAppService\Titan.Blog.IAppService.csproj" />
     <ProjectReference Include="..\Titan.Blog.Infrastructure\Titan.Blog.Infrastructure.csproj" />
     <ProjectReference Include="..\Titan.Blog.Model\Titan.Blog.Model.csproj" />
     <ProjectReference Include="..\Titan.Blog.Repository\Titan.Blog.Repository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DomainService\" />
+    <Folder Include="ModelService\" />
   </ItemGroup>
 
 </Project>

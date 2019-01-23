@@ -8,10 +8,10 @@
  * 修改原因：
  * Copyright (c) 2016 Titan.Han . All Rights Reserved. 
  * ***********************************************************************/
-using Titan.Model.DataModel;
 using System.Collections;
 using System.Threading;
 using Titan.Blog.Model.DataModel;
+using ModelBaseContext = Titan.Blog.Repository.EFCore.ModelBaseContext;
 
 namespace Titan.RepositoryCode.DataContextStorage
 {

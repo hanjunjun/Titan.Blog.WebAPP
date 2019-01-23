@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Titan.Model;
 
 namespace Titan.Blog.Model.DataModel
 {
-    public partial class SysButton : IAggregateRoot
+    public partial class SysButton : AggregateRoot
     {
         public Guid SysButtonId { get; set; }
         public Guid? SysModuleId { get; set; }

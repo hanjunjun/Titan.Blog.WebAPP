@@ -10,7 +10,7 @@
  * ***********************************************************************/
 
 using Titan.Blog.Model.DataModel;
-using Titan.Model.DataModel;
+using ModelBaseContext = Titan.Blog.Repository.EFCore.ModelBaseContext;
 
 namespace Titan.RepositoryCode.DataContextStorage
 {

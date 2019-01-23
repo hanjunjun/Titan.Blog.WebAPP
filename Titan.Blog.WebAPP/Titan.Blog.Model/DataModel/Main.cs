@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Titan.Model;
+﻿using System.Collections.Generic;
 
 namespace Titan.Blog.Model.DataModel
 {
-    public partial class Main : IAggregateRoot
+    public partial class Main : AggregateRoot
     {
         public Main()
         {

@@ -1,11 +1,11 @@
-﻿using Titan.Model;
+﻿using Titan.Blog.Model;
 
 namespace Titan.Infrastructure.UnitofWork
 {
     public interface IUnitOfWorkRepository
     {
-        void PersistCreationOf(IAggregateRoot entity);
-        void PersistUpdateOf(IAggregateRoot entity);
-        void PersistDeletionOf(IAggregateRoot entity);
+        void PersistCreationOf(AggregateRoot entity);
+        void PersistUpdateOf(AggregateRoot entity);
+        void PersistDeletionOf(AggregateRoot entity);
     }
 }

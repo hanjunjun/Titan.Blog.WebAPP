@@ -1,12 +1,12 @@
-﻿using Titan.Model;
+﻿using Titan.Blog.Model;
 
 namespace Titan.Infrastructure.UnitofWork
 {
     public interface IUnitOfWork
     {
-        void RegisterAmended(IAggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository);
-        void RegisterNew(IAggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository);
-        void RegisterRemoved(IAggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository);
+        void RegisterAmended(AggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository);
+        void RegisterNew(AggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository);
+        void RegisterRemoved(AggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository);
         void Commit();
     }
 }

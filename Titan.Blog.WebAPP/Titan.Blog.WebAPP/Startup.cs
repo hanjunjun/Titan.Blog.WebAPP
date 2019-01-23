@@ -32,17 +32,18 @@ using Titan.Blog.Infrastructure.Log;
 using Titan.Blog.Infrastructure.Redis;
 using Titan.Blog.WebAPP.Filter;
 using Titan.Blog.WebAPP.Swagger;
-using Titan.Model.DataModel;
-using Titan.Blog.AppService.DomainService;
-using Titan.Blog.AppService.ModelService;
+//using Titan.Model.DataModel;
+//using Titan.Blog.AppService.DomainService;
+//using Titan.Blog.AppService.ModelService;
 using Titan.Blog.Model.DataModel;
 using Titan.Blog.WebAPP.Auth.Policys;
-using Titan.RepositoryCode;
+//using Titan.RepositoryCode;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using RazorEngine.Templating;
 using RazorEngine.Configuration;
 using RazorEngine;
 using RazorEngine.Text;
+using Titan.Blog.IRepository.Base;
 using Titan.Blog.WebAPP.AOP;
 
 namespace Titan.Blog.WebAPP
@@ -74,11 +75,22 @@ namespace Titan.Blog.WebAPP
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //services.AddScoped<AuthorDomainSvc>().AddScoped<AuthorSvc>().AddScoped<ModelRespositoryFactory<Author, Guid>>();
-            #region EF Core 注释了，改成从配置文件获取了。
+            #region EF Core 注释了，改成从配置文件获取了。每次request请求new一个ef 上下文
             //注入上下文对象
             //services.AddDbContext<ModelBaseContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //services.AddScoped(p => new ModelBaseContext(p.GetService<DbContextOptions<ModelBaseContext>>()));
+            //services.AddScoped<IUnitOfWork,EFUnitOfWork>();//EF工作单元注入
+            //services.AddScoped<ModelBaseContext>();//EF上下文注入
+            //var dbbuilder = new DbContextOptionsBuilder<ModelBaseContext>()
+            //.UseSqlServer(Configuration.GetConnectionString("BloggingDatabase"));
+            //             services.AddDbContext<ModelBaseContext>(options => options = dbbuilder);
+            //             services.AddScoped<ModelBaseContext>((p) => { return new EcolDbContext(dbbuilder.Options); });
+            //var optionsBuilder = new DbContextOptionsBuilder<ModelBaseContext>();
+            //optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            //// SingleInstance 就是单例模式，现在想起来当时写的好智障
+            //containerBuilder.RegisterInstance(new BookListDbContext(optionsBuilder.Options)).SingleInstance();
+            //services.AddScoped<ModelBaseContext>();
             #endregion
 
             #region 全局异常捕获
@@ -273,7 +285,7 @@ namespace Titan.Blog.WebAPP
                 //};
             });
             //自定义授权策略拦截器 -- 处理自定义策略的角色访问权限
-            services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+            //services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
             services.AddSingleton(permissionRequirement);
             #endregion
 
@@ -285,6 +297,7 @@ namespace Titan.Blog.WebAPP
             //实例化 AutoFac  容器   
             var builder = new ContainerBuilder();
             //注册要通过反射创建的组件
+           
             //builder.RegisterType<AdvertisementServices>().As<IAdvertisementServices>();
             builder.RegisterType<BlogCacheAOP>();//可以直接替换其他拦截器
                                                  //builder.RegisterType<AuthorDomainSvc>();//可以直接替换其他拦截器
@@ -303,28 +316,33 @@ namespace Titan.Blog.WebAPP
 
             // ※※★※※ 如果你是第一次下载项目，请先F6编译，然后再F5执行，※※★※※
             // ※※★※※ 因为解耦，bin文件夹没有以下两个dll文件，会报错，所以先编译生成这两个dll ※※★※※
-            builder.RegisterType<ModelRespositoryFactory<SysRoleModuleButton, Guid>>();
-            builder.RegisterType<ModelRespositoryFactory<SysRole, Guid>>();
-            builder.RegisterType<ModelRespositoryFactory<SysUser, Guid>>();
-            builder.RegisterType<ModelRespositoryFactory<Main, Guid>>();
+            //builder.RegisterType<ModelRespositoryFactory<SysRoleModuleButton, Guid>>();
+            //builder.RegisterType<ModelRespositoryFactory<SysRole, Guid>>();
+            //builder.RegisterType<ModelRespositoryFactory<SysUser, Guid>>();
+            //builder.RegisterType<ModelRespositoryFactory<Main, Guid>>();
             var repositoryDllFile = Path.Combine(basePath, "Titan.Blog.Repository.dll");
-            //var assemblysRepository = Assembly.LoadFile(repositoryDllFile);//Assembly.Load("Titan.Blog.Repository");
-            var assemblysRepository = Assembly.Load("Titan.Blog.Repository");
-            builder.RegisterAssemblyTypes(assemblysRepository);
+            var assemblysRepository = Assembly.LoadFile(repositoryDllFile);//Assembly.Load("Titan.Blog.Repository");
+            //var assemblysRepository = Assembly.Load("Titan.Blog.Repository");
+            builder.RegisterAssemblyTypes(assemblysRepository).Where(x=>x.Name.Contains("Repository")).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(assemblysRepository).Where(x=>x.Name== "ModelBaseContext").InstancePerDependency();
 
             var servicesDllFile = Path.Combine(basePath, "Titan.Blog.AppService.dll");//获取项目绝对路径
-            //var assemblysServices = Assembly.LoadFile(servicesDllFile);// Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
-             var assemblysServices =  Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
-            builder.RegisterAssemblyTypes(assemblysServices)
-                .EnableClassInterceptors()
-                // 如果你想注入两个，就这么写  InterceptedBy(typeof(BlogCacheAOP), typeof(BlogLogAOP));
-                .InterceptedBy(typeof(BlogCacheAOP));//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
+            var assemblysServices = Assembly.LoadFile(servicesDllFile);// Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
+                                                                       //var assemblysServices =  Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
+            builder.RegisterAssemblyTypes(assemblysServices).AsImplementedInterfaces();
 
-            var assemblysModel = Assembly.Load("Titan.Blog.Model");//直接采用加载文件的方法
-            builder.RegisterAssemblyTypes(assemblysModel);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
+            builder.RegisterType(typeof(IBaseRepository<,>)).InstancePerDependency();//注册仓储泛型
 
-            var assemblysInfrastru = Assembly.Load("Titan.Blog.Infrastructure");//直接采用加载文件的方法
-            builder.RegisterAssemblyTypes(assemblysInfrastru);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
+            //builder.RegisterAssemblyTypes(assemblysServices)
+            //    .EnableClassInterceptors()
+            //    // 如果你想注入两个，就这么写  InterceptedBy(typeof(BlogCacheAOP), typeof(BlogLogAOP));
+            //    .InterceptedBy(typeof(BlogCacheAOP));//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
+
+            //var assemblysModel = Assembly.Load("Titan.Blog.Model");//直接采用加载文件的方法
+            //builder.RegisterAssemblyTypes(assemblysModel);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
+
+            //var assemblysInfrastru = Assembly.Load("Titan.Blog.Infrastructure");//直接采用加载文件的方法
+            //builder.RegisterAssemblyTypes(assemblysInfrastru);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
 
             ////builder.RegisterAssemblyTypes(assemblysServices)
             ////         .AsImplementedInterfaces()
@@ -356,7 +374,10 @@ namespace Titan.Blog.WebAPP
             //    .Where(x => x.Activator.LimitType.ToString().Contains("Titan.RepositoryCode")).ToList();
             //var data1 = applicationContainer.ComponentRegistry.Registrations
             //    .Where(x => x.Activator.LimitType.ToString().Contains("Titan.Blog.AppService")).ToList();
-
+            var data1 = applicationContainer.ComponentRegistry.Registrations
+                .Where(x => x.Activator.LimitType.ToString().Contains("BaseRepository")).ToList();
+            var fff = applicationContainer.ComponentRegistry.Registrations
+                .Where(x => x.Activator.LimitType.ToString().Contains("ModelBaseContext")).ToList();
             //var clas1 = applicationContainer.Resolve<AuthorDomainSvc>();
             //Console.WriteLine(clas1.GetList());
             #endregion

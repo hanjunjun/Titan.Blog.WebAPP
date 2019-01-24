@@ -176,7 +176,7 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
-        public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, bool isAsc)
+        public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
         {
             return await Task.Run(() =>
             {
@@ -206,7 +206,7 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
-        public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, bool isAsc)
+        public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
         {
             return await Task.Run(() =>
             {
@@ -244,7 +244,7 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
-        public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
             {
@@ -285,7 +285,7 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
-        public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, Func<T, A> orderBy3, bool isAsc)
+        public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
         {
             return await Task.Run(() =>
             {
@@ -320,12 +320,11 @@ namespace Titan.Blog.Repository.Base
                             return list.OrderByDescending<T, A>(orderBy1).ToList();
                     }
                 }
-
                 return list.ToList();
             });
         }
 
-        public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, Func<T, A> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
             {
@@ -363,7 +362,7 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
-        public async Task<List<T>> Query<A, B>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, bool isAsc)
+        public async Task<List<T>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
         {
             return await Task.Run(() =>
             {
@@ -402,7 +401,7 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
-        public async Task<Tuple<List<T>, int>> Query<A, B>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
             {
@@ -428,14 +427,91 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
-        public async Task<List<T>> Query<A, B, C>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, Func<T, C> orderBy3, bool isAsc)
+        public async Task<List<T>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet();
+                if (where != null)
+                    list = _context.Set<T>().Where(where);
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (orderBy3 != null)
+                        {
+                            if (isAsc)
+                                return list.OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).ThenBy<T, C>(orderBy3)
+                                    .ToList();
+                            else
+                            {
+                                return list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2)
+                                    .ThenByDescending<T, C>(orderBy3).ToList();
+                            }
+
+
+                        }
+                        else
+                        {
+                            if (isAsc)
+                                return list.OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).ToList();
+                            else
+                                return list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).ToList();
+                        }
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return list.OrderBy<T, A>(orderBy1).ToList();
+                        else
+                            return list.OrderByDescending<T, A>(orderBy1).ToList();
+                    }
+
+                }
+
+                return list.ToList();
+            });
         }
 
-        public async Task<Tuple<List<T>, int>> Query<A, B, C>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, Func<T, C> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet();
+                if (where != null)
+                    list = _context.Set<T>().Where(where);
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (orderBy3 != null)
+                        {
+                            if (isAsc)
+                                return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).ThenBy<T, C>(orderBy3).ToList(), list.Count());
+                            else
+                            {
+                                return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).ThenByDescending<T, C>(orderBy3).AsQueryable().ToList(), list.Count());
+                            }
+                        }
+                        else
+                        {
+                            if (isAsc)
+                                return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).ToList(), list.Count());
+                            else
+                                return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).ToList(), list.Count());
+                        }
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ToList(), list.Count());
+                        else
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ToList(), list.Count());
+                    }
+
+                }
+                return new Tuple<List<T>, int>(list.ToList(), list.Count());
+            });
         }
         #endregion
 
@@ -464,52 +540,88 @@ namespace Titan.Blog.Repository.Base
             throw new NotImplementedException();
         }
 
-        public async Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, bool isAsc)
+        public async Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, bool isAsc)
+        public async Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        {
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet();
+                if (where != null)
+                    list = _context.Set<T>().Where(where);
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (isAsc)
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                        else
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                        else
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                    }
+                }
+                else
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (isAsc)
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                        else
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                    }
+                    else
+                    {
+                        return new Tuple<List<T>, int>(list.Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                    }
+                }
+            });
+        }
+
+        public async Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, Func<T, A> orderBy3, bool isAsc)
+        public async Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, Func<T, A> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public async Task<List<T>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<T>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, bool isAsc)
+        public async Task<Tuple<List<T>, int>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Tuple<List<T>, int>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public async Task<List<T>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<T>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, Func<T, C> orderBy3, bool isAsc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Tuple<List<T>, int>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, Func<T, C> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }

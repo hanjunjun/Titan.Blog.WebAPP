@@ -91,6 +91,9 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         [HttpGet("Fuck", Name = "Fuck")]
         public async Task<OpResult<string>> BlogList()
         {
+            //0 非跟踪分页查询--ef性能测试
+            var test = await _iMainServices.QueryAsNotraking();
+
             //1
             Random rd=new Random();
             var data= await _iMainServices.GetList();

@@ -47,52 +47,52 @@ namespace Titan.Blog.AppService.Base
             throw new NotImplementedException();
         }
 
-        public Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, bool isAsc)
+        public Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, bool isAsc, int pageIndex, int pageSize)
+        public Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, bool isAsc)
+        public Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        {
+            return await BaseRepository.AsNoTracking<A>(where,orderBy1,orderBy2, isAsc, pageIndex,pageSize);
+        }
+
+        public Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, Func<T, A> orderBy3, bool isAsc)
+        public Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, Func<T, A> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public Task<List<T>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<T>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, bool isAsc)
+        public Task<Tuple<List<T>, int>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Tuple<List<T>, int>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public Task<List<T>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<T>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, Func<T, C> orderBy3, bool isAsc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Tuple<List<T>, int>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, Func<T, C> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public Task<Tuple<List<T>, int>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
@@ -132,52 +132,52 @@ namespace Titan.Blog.AppService.Base
             throw new NotImplementedException();
         }
 
-        public Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, bool isAsc)
+        public Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, string>> orderBy1, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc, int pageIndex, int pageSize)
         {
             return await BaseRepository.Query(where, orderBy1, isAsc, pageIndex, pageSize);
         }
 
-        public Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, bool isAsc)
+        public Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, Func<T, A> orderBy3, bool isAsc)
+        public Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, A> orderBy2, Func<T, A> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<T>> Query<A, B>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, bool isAsc)
+        public Task<List<T>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Tuple<List<T>, int>> Query<A, B>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public Task<Tuple<List<T>, int>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<T>> Query<A, B, C>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, Func<T, C> orderBy3, bool isAsc)
+        public Task<List<T>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Tuple<List<T>, int>> Query<A, B, C>(Expression<Func<T, bool>> where, Func<T, A> orderBy1, Func<T, B> orderBy2, Func<T, C> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public Task<Tuple<List<T>, int>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             throw new NotImplementedException();
         }

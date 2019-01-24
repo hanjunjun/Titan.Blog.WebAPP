@@ -428,7 +428,7 @@ namespace Titan.Blog.WebAPP
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{(Configuration.GetSection("Swagger"))["" + "ProjectName" + ""]} {version}");
                 });
                 // Display
-                c.DefaultModelExpandDepth(2);
+                c.DefaultModelExpandDepth(2);//接口列表折叠配置
                 c.DefaultModelRendering(ModelRendering.Model);
                 c.DefaultModelsExpandDepth(-1);//不显示model
                 c.DisplayOperationId();

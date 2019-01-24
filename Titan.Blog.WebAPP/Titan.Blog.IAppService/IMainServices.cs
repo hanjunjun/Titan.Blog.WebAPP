@@ -21,5 +21,7 @@ namespace Titan.Blog.IAppService
     {
         Task AddModel(Main model);
         Task<Tuple<List<Main>, int>> GetList();
+
+        Task<Tuple<List<Children>, int>> QueryAsNotraking();
     }
 }

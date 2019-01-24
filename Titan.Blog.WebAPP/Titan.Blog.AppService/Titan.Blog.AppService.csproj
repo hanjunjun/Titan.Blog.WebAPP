@@ -20,12 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="DomainService\AuthorDomainSvc.cs" />
-    <Compile Remove="ModelService\MainSvc.cs" />
-    <Compile Remove="ModelService\SysUserSvc.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Titan.Blog.AppService.xml" />
   </ItemGroup>
 
@@ -39,11 +33,6 @@
     <ProjectReference Include="..\Titan.Blog.Infrastructure\Titan.Blog.Infrastructure.csproj" />
     <ProjectReference Include="..\Titan.Blog.Model\Titan.Blog.Model.csproj" />
     <ProjectReference Include="..\Titan.Blog.Repository\Titan.Blog.Repository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DomainService\" />
-    <Folder Include="ModelService\" />
   </ItemGroup>
 
 </Project>

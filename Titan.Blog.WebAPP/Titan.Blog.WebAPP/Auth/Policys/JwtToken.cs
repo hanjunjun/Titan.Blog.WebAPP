@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Titan.Blog.Infrastructure.Data;
+using Titan.Blog.Model.ResultModel;
 
 namespace Titan.Blog.WebAPP.Auth.Policys
 {

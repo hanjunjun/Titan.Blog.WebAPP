@@ -28,7 +28,7 @@ namespace Titan.Blog.Repository.EFCore
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            //启用EF延迟加载
+            //启用EF延迟加载-可以点出外键对象
             optionsBuilder.UseLazyLoadingProxies().UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
 

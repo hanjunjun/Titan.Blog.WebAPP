@@ -16,8 +16,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Titan.Blog.Infrastructure.Data;
 using Titan.Blog.Infrastructure.File;
+using Titan.Blog.Model.ResultModel;
 
 namespace Titan.Blog.Infrastructure.Office
 {

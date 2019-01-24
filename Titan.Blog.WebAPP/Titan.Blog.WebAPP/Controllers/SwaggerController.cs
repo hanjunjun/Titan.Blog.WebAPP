@@ -17,7 +17,6 @@ using Titan.Blog.Infrastructure.Serializable;
 using Titan.Blog.Infrastructure.T4;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
-using Titan.Infrastructure.Domain;
 
 namespace Titan.Blog.WebAPP.Controllers
 {

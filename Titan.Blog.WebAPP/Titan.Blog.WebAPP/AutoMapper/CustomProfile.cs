@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Titan.Blog.Model.DataModel;
 
-namespace Blog.Core.AutoMapper
+namespace Titan.Blog.WebAPP.AutoMapper
 {
     public class CustomProfile : Profile
     {

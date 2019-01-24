@@ -19,7 +19,6 @@ using Titan.Blog.IRepository.Base;
 using Titan.Blog.Model;
 using Titan.Blog.Model.DataModel;
 using Titan.Blog.Repository.EFCore;
-using Titan.RepositoryCode;
 
 namespace Titan.Blog.Repository.Base
 {

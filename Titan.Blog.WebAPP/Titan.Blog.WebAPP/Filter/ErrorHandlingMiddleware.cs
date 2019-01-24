@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.AspNetCore.Hosting;
 using Titan.Blog.Infrastructure.Log;
-using Titan.Blog.Infrastructure.Data;
+using Titan.Blog.Model.ResultModel;
 
 namespace Titan.Blog.WebAPP.Filter
 {

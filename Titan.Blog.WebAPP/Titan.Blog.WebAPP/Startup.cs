@@ -22,7 +22,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using Blog.Core.AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -45,6 +44,7 @@ using RazorEngine;
 using RazorEngine.Text;
 using Titan.Blog.IRepository.Base;
 using Titan.Blog.WebAPP.AOP;
+using Titan.Blog.WebAPP.AutoMapper;
 
 namespace Titan.Blog.WebAPP
 {
@@ -324,14 +324,14 @@ namespace Titan.Blog.WebAPP
             var assemblysRepository = Assembly.LoadFile(repositoryDllFile);//Assembly.Load("Titan.Blog.Repository");
             //var assemblysRepository = Assembly.Load("Titan.Blog.Repository");
             builder.RegisterAssemblyTypes(assemblysRepository).Where(x=>x.Name.Contains("Repository")).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(assemblysRepository).Where(x=>x.Name== "ModelBaseContext").InstancePerDependency();
+            builder.RegisterAssemblyTypes(assemblysRepository).Where(x=>x.Name== "ModelBaseContext").InstancePerDependency();//注册ef上下文
 
             var servicesDllFile = Path.Combine(basePath, "Titan.Blog.AppService.dll");//获取项目绝对路径
             var assemblysServices = Assembly.LoadFile(servicesDllFile);// Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
                                                                        //var assemblysServices =  Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
             builder.RegisterAssemblyTypes(assemblysServices).AsImplementedInterfaces();
 
-            builder.RegisterType(typeof(IBaseRepository<,>)).InstancePerDependency();//注册仓储泛型
+            //builder.RegisterType(typeof(IBaseRepository<,>)).InstancePerDependency();//注册仓储泛型
 
             //builder.RegisterAssemblyTypes(assemblysServices)
             //    .EnableClassInterceptors()
@@ -456,8 +456,8 @@ namespace Titan.Blog.WebAPP
             });
             #endregion
 
-            //Http上下文
-            app.UseStaticHttpContext();
+            //HttpContext上下文
+            //app.UseStaticHttpContext();
 
             #region 认证配置
             //app.UseMiddleware<JwtTokenAuth>();//注意此授权方法已经放弃，请使用下边的官方验证方法。但是如果你还想传User的全局变量，还是可以继续使用中间件

@@ -33,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOModel\" />
     <Folder Include="ViewModel\" />
   </ItemGroup>
 

@@ -22,119 +22,132 @@ namespace Titan.Blog.AppService.Base
     public class BaseServices<T, TEntity> : IBaseServices<T, TEntity> where T : AggregateRoot, new()
     {
         public IBaseRepository<T, TEntity> BaseRepository;
+        #region 增删改操作
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public async Task Add(T entity)
         {
             await BaseRepository.Add(entity);
         }
 
-        public Task<List<T>> AsNoTracking()
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task Delete(T entity)
         {
-            throw new NotImplementedException();
+            await BaseRepository.Delete(entity);
         }
 
-        public Task<List<T>> AsNoTracking(int pageIndex, int pageSize)
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task Update(T entity)
         {
-            throw new NotImplementedException();
+            await BaseRepository.Update(entity);
+        }
+        #endregion
+
+        #region  SQL CURD操作
+        /// <summary>
+        /// SQL语句查询
+        /// </summary>
+        /// <param name="querySql">SQL语句</param>
+        /// <returns></returns>
+        public async Task<List<T>> QueryBySql(string querySql)
+        {
+            return await BaseRepository.QueryBySql(querySql);
         }
 
-        public Task<List<T>> AsNoTracking(Expression<Func<T, bool>> where)
+        /// <summary>
+        /// SQL语句分页查询
+        /// </summary>
+        /// <param name="querySql">SQL语句</param>
+        /// <param name="pageIndex">页面索引</param>
+        /// <param name="pageSize">页面大小</param>
+        /// <returns></returns>
+        public async Task<List<T>> QueryBySql(string querySql, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.QueryBySql(querySql, pageIndex, pageSize);
         }
 
-        public Task<Tuple<List<T>, int>> AsNoTracking(Expression<Func<T, bool>> where, int pageIndex, int pageSize)
+        /// <summary>
+        /// 执行SQL
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public async Task ExecuteSql(string sql)
         {
-            throw new NotImplementedException();
+            await ExecuteSql(sql);
         }
 
-        public Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
+        /// <summary>
+        /// 执行SQL带参数
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public async Task ExecuteSql(string sql, params object[] parameters)
         {
-            throw new NotImplementedException();
+            await ExecuteSql(sql, parameters);
+        }
+        #endregion
+
+        #region 跟踪查询
+        /// <summary>
+        /// 根据主键Id查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<T> QueryById(TEntity id)
+        {
+            return await BaseRepository.QueryById(id);
         }
 
-        public Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc, int pageIndex, int pageSize)
+        /// <summary>
+        /// 查询所有数据
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<T>> Query()
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query();
         }
 
-        public Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
+        /// <summary>
+        /// 分页查询<see cref="T"/>所有数据
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public async Task<List<T>> Query(int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query(pageIndex, pageSize);
         }
 
-        public async Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        /// <summary>
+        /// 根据条件查询
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public async Task<List<T>> Query(Expression<Func<T, bool>> where)
         {
-            return await BaseRepository.AsNoTracking<A>(where,orderBy1,orderBy2, isAsc, pageIndex,pageSize);
+            return await BaseRepository.Query(where);
         }
 
-        public Task<List<T>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
+        public async Task<Tuple<List<T>, int>> Query(Expression<Func<T, bool>> where, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query(where, pageIndex, pageSize);
         }
 
-        public Task<Tuple<List<T>, int>> AsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<T>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Tuple<List<T>, int>> AsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<T>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Tuple<List<T>, int>> AsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Delete(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ExecuteSql(string sql)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ExecuteSql(string sql, params object[] parameters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<T>> Query()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<T>> Query(int pageIndex, int pageSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<T>> Query(Expression<Func<T, bool>> where)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Tuple<List<T>, int>> Query(Expression<Func<T, bool>> where, int pageIndex, int pageSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
-        {
-            throw new NotImplementedException();
+            return await BaseRepository.Query(where, orderBy1, isAsc);
         }
 
         public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc, int pageIndex, int pageSize)
@@ -142,69 +155,121 @@ namespace Titan.Blog.AppService.Base
             return await BaseRepository.Query(where, orderBy1, isAsc, pageIndex, pageSize);
         }
 
-        public Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
+        public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query<A>(where, orderBy1, orderBy2, isAsc);
         }
 
-        public Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query<A>(where, orderBy1, orderBy2, isAsc, pageIndex, pageSize);
         }
 
-        public Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
+        public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query<A>(where, orderBy1, orderBy2, orderBy3, isAsc);
         }
 
-        public Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query<A>(where, orderBy1, orderBy2, orderBy3, isAsc, pageIndex, pageSize);
         }
 
-        public Task<List<T>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
+        public async Task<List<T>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query<A, B>(where, orderBy1, orderBy2, isAsc);
         }
 
-        public Task<Tuple<List<T>, int>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query<A, B>(where, orderBy1, orderBy2, isAsc, pageIndex, pageSize);
         }
 
-        public Task<List<T>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
+        public async Task<List<T>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query<A, B, C>(where, orderBy1, orderBy2, orderBy3, isAsc);
         }
 
-        public Task<Tuple<List<T>, int>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        public async Task<Tuple<List<T>, int>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.Query<A, B, C>(where, orderBy1, orderBy2, orderBy3, isAsc, pageIndex, pageSize);
+        }
+        #endregion
+
+        #region AsNoTracking非跟踪查询
+        public async Task<T> QueryAsNoTrackingById(TEntity id)
+        {
+            return await BaseRepository.QueryAsNoTrackingById(id);
+        }
+        public async Task<List<T>> QueryAsNoTracking()
+        {
+            return await BaseRepository.QueryAsNoTracking();
         }
 
-        public Task<T> QueryAsNoTrackingById(TEntity id)
+        public async Task<List<T>> QueryAsNoTracking(int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.QueryAsNoTracking();
         }
 
-        public Task<T> QueryById(TEntity id)
+        public async Task<List<T>> QueryAsNoTracking(Expression<Func<T, bool>> where)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.QueryAsNoTracking(where);
         }
 
-        public Task<List<T>> QueryBySql(string querySql)
+        public async Task<Tuple<List<T>, int>> QueryAsNoTracking(Expression<Func<T, bool>> where, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.QueryAsNoTracking(where, pageIndex, pageSize);
         }
 
-        public Task<List<T>> QueryBySql(string querySql, int pageIndex, int pageSize)
+        public async Task<List<T>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.QueryAsNoTracking(where, orderBy1, isAsc);
         }
 
-        public Task Update(T entity)
+        public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await BaseRepository.QueryAsNoTracking(where, orderBy1, isAsc, pageIndex, pageSize);
         }
+
+        public async Task<List<T>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
+        {
+            return await BaseRepository.QueryAsNoTracking<A>(where, orderBy1, orderBy2, isAsc);
+        }
+
+        public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        {
+            return await BaseRepository.QueryAsNoTracking<A>(where, orderBy1, orderBy2, isAsc, pageIndex, pageSize);
+        }
+
+        public async Task<List<T>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
+        {
+            return await BaseRepository.QueryAsNoTracking<A>(where, orderBy1, orderBy2, orderBy3, isAsc);
+        }
+
+        public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        {
+            return await BaseRepository.QueryAsNoTracking<A>(where, orderBy1, orderBy2, orderBy3, isAsc, pageIndex, pageSize);
+        }
+
+        public async Task<List<T>> QueryAsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
+        {
+            return await BaseRepository.QueryAsNoTracking<A, B>(where, orderBy1, orderBy2, isAsc);
+        }
+
+        public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
+        {
+            return await BaseRepository.QueryAsNoTracking<A, B>(where, orderBy1, orderBy2, isAsc, pageIndex, pageSize);
+        }
+
+        public async Task<List<T>> QueryAsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
+        {
+            return await BaseRepository.QueryAsNoTracking<A, B, C>(where, orderBy1, orderBy2, orderBy3, isAsc);
+        }
+
+        public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
+        {
+            return await BaseRepository.QueryAsNoTracking<A, B, C>(where, orderBy1, orderBy2, orderBy3, isAsc, pageIndex, pageSize);
+        }
+        #endregion
     }
 }

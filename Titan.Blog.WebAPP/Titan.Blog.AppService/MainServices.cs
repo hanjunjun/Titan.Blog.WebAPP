@@ -60,12 +60,12 @@ namespace Titan.Blog.AppService
 
         public async Task<Tuple<List<Children>, int>> QueryAsNotraking()
         {
-            string redisConfiguration = Appsettings.app(new string[] { "AppSettings", "RedisCaching", "ConnectionString" });//获取连接字符串
+            //string redisConfiguration = Appsettings.app(new string[] { "AppSettings", "RedisCaching", "ConnectionString" });//获取连接字符串
             //ef非跟踪查询
             Expression<Func<Children, bool>> where1 = x => x.Main.Telphone.Contains("11");
             Expression<Func<Children, string>> orderby1 = x => x.Name;
             Expression<Func<Children, string>> orderby2 = x => x.Id.ToString();
-            var data= await _iChildrenRepository.AsNoTracking<string>(where1, orderby1, orderby2, true, 1, 10);
+            var data= await _iChildrenRepository.QueryAsNoTracking<string>(where1, orderby1, orderby2, true, 1, 10);
             //更新数据
             var put = data.Item1.FirstOrDefault();
             put.Name = "非跟踪更新";

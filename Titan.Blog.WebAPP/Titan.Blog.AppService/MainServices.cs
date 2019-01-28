@@ -17,9 +17,13 @@ using System.Threading.Tasks;
 using Titan.Blog.AppService.Base;
 using Titan.Blog.IAppService;
 using Titan.Blog.IAppService.Base;
+using Titan.Blog.Infrastructure.Attribute;
+using Titan.Blog.Infrastructure.AutoMapper;
 using Titan.Blog.Infrastructure.Utility;
 using Titan.Blog.IRepository;
 using Titan.Blog.Model.DataModel;
+using Titan.Blog.Model.DTOModel;
+using Titan.Blog.Model.ResultModel;
 
 namespace Titan.Blog.AppService
 {
@@ -27,12 +31,23 @@ namespace Titan.Blog.AppService
     {
         private readonly IMainRepository _iMainRepository;
         private readonly IChildrenRepository _iChildrenRepository;
-
-        public MainServices(IMainRepository iMainRepository, IChildrenRepository iChildrenRepository)
+        private readonly ISysRoleRepository _iSysRoleRepository;
+        private readonly ISysRoleModuleButtonRepository _iSysRoleModuleButtonRepository;
+        private readonly ISysModuleRepository _iSysModuleRepository;
+        private readonly ISysUserRepository _iSysUserRepository;
+        private readonly ISysUserRoleRepository _iSysUserRoleRepository;
+        public MainServices(IMainRepository iMainRepository, IChildrenRepository iChildrenRepository, ISysRoleRepository iSysRoleRepository,
+            ISysRoleModuleButtonRepository iSysRoleModuleButtonRepository, ISysModuleRepository iSysModuleRepository, ISysUserRepository iSysUserRepository,
+            ISysUserRoleRepository iSysUserRoleRepository)
         {
             base.BaseRepository = iMainRepository;//如果要用基类封装的方法必须传值
             _iMainRepository = iMainRepository;
             _iChildrenRepository = iChildrenRepository;
+            _iSysRoleRepository = iSysRoleRepository;
+            _iSysRoleModuleButtonRepository = iSysRoleModuleButtonRepository;
+            _iSysModuleRepository = iSysModuleRepository;
+            _iSysUserRepository = iSysUserRepository;
+            _iSysUserRoleRepository = iSysUserRoleRepository;
         }
 
         public async Task AddModel(Main model)
@@ -71,6 +86,42 @@ namespace Titan.Blog.AppService
             put.Name = "非跟踪更新";
             await _iChildrenRepository.Update(put);
             return data;
+        }
+
+        /// <summary>
+        /// 获取系统中所有的权限
+        /// </summary>
+        /// <returns></returns>
+        [Caching(AbsoluteExpiration = 10)]
+        public async Task<List<SysRoleModuleButtonDto>> GeRoleModule()
+        {
+            var dto = await _iSysRoleModuleButtonRepository.QueryAsNoTracking(x => x.ModuleType == 0);//
+            var roleModuleButton = dto.MapToList<SysRoleModuleButton, SysRoleModuleButtonDto>();
+            if (roleModuleButton.Count > 0)
+            {
+                foreach (var item in roleModuleButton)
+                {
+                    item.SysRole = _iSysRoleRepository.QueryBySql($"select * from SysRole where SysRoleId={item.SysRoleId} and IsDelete!=1 and RoleStatus=1").Result.FirstOrDefault();
+                    item.SysModule = _iSysModuleRepository.QueryBySql($"select * from SysModule where SysModuleId={item.SysModuleId} and ModuleStatus=1 and IsDelete!=1").Result.FirstOrDefault();
+                }
+
+            }
+            return roleModuleButton;
+        }
+
+        public async Task<Tuple<OpResult<string>, SysUser>> VerifyPassword(string userId, string userPwd)
+        {
+            var userInfo = await _iSysUserRepository.QueryBySql($"select * from SysUser where UserId={userId} and UserPwd={userPwd} and UserStatus=1");//验证用户id和密码
+            var sysUser = userInfo.FirstOrDefault();
+            if (sysUser != null)
+            {
+                var roleList = _iSysUserRoleRepository.QueryBySql($"SELECT * from SysUserRole where SysUserId={sysUser.SysUserId}").Result.Select(x => x.SysRoleId).ToList();//获取用户角色
+                var roleNameList = _iSysRoleRepository.QueryAsNoTracking(x => roleList.Contains(x.SysRoleId) && x.IsDelete != true && x.RoleStatus == true).Result.Select(x => x.RoleName).ToList();//获取用户角色名称
+                var roleName = string.Join(',', roleNameList);
+                return new Tuple<OpResult<string>, SysUser>(new OpResult<string>(OpResultType.Success, roleName),sysUser);
+            }
+            
+            return new Tuple<OpResult<string>, SysUser>(new OpResult<string>(OpResultType.AuthInvalid, "帐号或密码不正确！"), sysUser);
         }
     }
 }

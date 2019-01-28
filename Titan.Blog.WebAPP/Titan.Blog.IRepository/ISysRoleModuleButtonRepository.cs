@@ -6,7 +6,7 @@ using Titan.Blog.Model.DataModel;
 
 namespace Titan.Blog.IRepository
 {
-    public interface ISysRoleModuleButtonRepository : IBaseRepository<SysRole, Guid>
+    public interface ISysRoleModuleButtonRepository : IBaseRepository<SysRoleModuleButton, Guid>
     {
 
     }

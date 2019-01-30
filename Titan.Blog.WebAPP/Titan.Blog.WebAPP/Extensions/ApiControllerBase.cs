@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using Titan.Blog.Infrastructure.Serializable;
+using Titan.Blog.Model.CommonModel;
 
 namespace Titan.Blog.WebAPP.Extensions
 {
@@ -15,13 +14,16 @@ namespace Titan.Blog.WebAPP.Extensions
         /// <summary>
         /// 用户信息
         /// </summary>
-        protected string UserInfo
+        protected UserInfo UserInfo
         {
             get
             {
-                var routeData= HttpContext.GetRouteData();
-                //var data = new JwtSecurityTokenHandler().ReadJwtToken();
-                return "";
+                var routeData = (from item in HttpContext.User.Claims
+                    where item.Type == ClaimTypes.UserData
+                    select item.Value).ToList().FirstOrDefault();
+                if (routeData == null)
+                    throw new Exception("获取用户信息异常！");
+                return JsonHelper.StrToModel<UserInfo>(routeData);
             }
         }
     }

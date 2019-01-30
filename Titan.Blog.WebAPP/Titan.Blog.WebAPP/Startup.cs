@@ -162,7 +162,7 @@ namespace Titan.Blog.WebAPP
                     {
                         Version = version,
                         Title = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} WebAPI",
-                        Description = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} HTTP WebAPI " + version+"，博客系统前后端分离，后端框架。",
+                        Description = $"{(Configuration.GetSection("Swagger"))["ProjectName"]} HTTP WebAPI " + version + "，博客系统前后端分离，后端框架。",
                         TermsOfService = "None",
                         Contact = new Contact { Name = "韩俊俊", Email = "1454055505@qq.com", Url = "http://gaobili.cn/" }
                     });
@@ -199,7 +199,7 @@ namespace Titan.Blog.WebAPP
                 #region Swagger文档过滤
                 c.DocumentFilter<RemoveBogusDefinitionsDocumentFilter>();//过滤model
                 #endregion
-                
+
             });
             #endregion
 
@@ -245,7 +245,7 @@ namespace Titan.Blog.WebAPP
                 audienceConfig["Issuer"], //发行人
                 audienceConfig["Audience"], //听众
                 signingCredentials, //签名凭据
-                expiration: TimeSpan.FromSeconds(60*10) //接口的过期时间
+                expiration: TimeSpan.FromSeconds(60 * 60) //接口的过期时间
             );
 
             //加载角色策略 一个策略对应多个角色，一个角色可以对应多个策略，一个人可以有多个角色
@@ -285,7 +285,7 @@ namespace Titan.Blog.WebAPP
                 //};
             });
             //自定义授权策略拦截器 -- 处理自定义策略的角色访问权限
-            //services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+            services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
             services.AddSingleton(permissionRequirement);
             #endregion
 
@@ -297,19 +297,19 @@ namespace Titan.Blog.WebAPP
             //实例化 AutoFac  容器   
             var builder = new ContainerBuilder();
             //注册要通过反射创建的组件
-           
+
             //builder.RegisterType<AdvertisementServices>().As<IAdvertisementServices>();
             builder.RegisterType<BlogCacheAOP>();//可以直接替换其他拦截器
                                                  //builder.RegisterType<AuthorDomainSvc>();//可以直接替换其他拦截器
                                                  //var assemblysServices1 = Assembly.Load("Blog.Core.Services");
-            //将services填充到Autofac容器生成器中
+                                                 //将services填充到Autofac容器生成器中
             builder.Populate(services);
             //获取当前应用程序加载程序集（C/S应用中使用）
             //var assembly = Assembly.GetExecutingAssembly();
             //builder.RegisterAssemblyTypes(assembly); //注册所有程序集类定义的非静态类型
             builder.RegisterType<Permission>();
             builder.RegisterType<SigningCredentials>();
-            builder.RegisterType<TimeSpan>();
+            //builder.RegisterType<TimeSpan>();
             //builder.RegisterType<AuthorDomainSvc>();
             //builder.RegisterType<AuthorSvc>();
             //builder.RegisterType<ModelRespositoryFactory<Author, Guid>>();
@@ -323,13 +323,17 @@ namespace Titan.Blog.WebAPP
             var repositoryDllFile = Path.Combine(basePath, "Titan.Blog.Repository.dll");
             var assemblysRepository = Assembly.LoadFile(repositoryDllFile);//Assembly.Load("Titan.Blog.Repository");
             //var assemblysRepository = Assembly.Load("Titan.Blog.Repository");
-            builder.RegisterAssemblyTypes(assemblysRepository).Where(x=>x.Name.Contains("Repository")).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(assemblysRepository).Where(x=>x.Name== "ModelBaseContext").InstancePerDependency();//注册ef上下文
+            builder.RegisterAssemblyTypes(assemblysRepository).Where(x => x.Name.Contains("Repository")).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(assemblysRepository).Where(x => x.Name == "ModelBaseContext").InstancePerDependency();//注册ef上下文
 
             var servicesDllFile = Path.Combine(basePath, "Titan.Blog.AppService.dll");//获取项目绝对路径
             var assemblysServices = Assembly.LoadFile(servicesDllFile);// Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
                                                                        //var assemblysServices =  Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
-            builder.RegisterAssemblyTypes(assemblysServices).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(assemblysServices)
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(BlogCacheAOP));//引用Autofac.Extras.DynamicProxy;
 
             //builder.RegisterType(typeof(IBaseRepository<,>)).InstancePerDependency();//注册仓储泛型
 
@@ -372,8 +376,8 @@ namespace Titan.Blog.WebAPP
             //获取容器内的对象
             //var data = applicationContainer.ComponentRegistry.Registrations
             //    .Where(x => x.Activator.LimitType.ToString().Contains("Titan.RepositoryCode")).ToList();
-            //var data1 = applicationContainer.ComponentRegistry.Registrations
-            //    .Where(x => x.Activator.LimitType.ToString().Contains("Titan.Blog.AppService")).ToList();
+            var dataf = applicationContainer.ComponentRegistry.Registrations
+                .Where(x => x.Activator.LimitType.ToString().Contains("Titan.Blog.AppService")).ToList();
             var data1 = applicationContainer.ComponentRegistry.Registrations
                 .Where(x => x.Activator.LimitType.ToString().Contains("BaseRepository")).ToList();
             var fff = applicationContainer.ComponentRegistry.Registrations
@@ -452,7 +456,7 @@ namespace Titan.Blog.WebAPP
                 c.InjectJavascript("/buzyload/app.min.js");//loading 遮罩层js
                 c.InjectJavascript("/swagger-lang.js");//我们自定义的js
 
-                
+
             });
             #endregion
 

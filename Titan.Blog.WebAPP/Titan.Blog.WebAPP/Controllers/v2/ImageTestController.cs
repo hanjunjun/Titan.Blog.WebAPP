@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Titan.Blog.AppService.DomainService;
-using Titan.Blog.Infrastructure.Data;
+using Titan.Blog.Model.ResultModel;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
-using Titan.Model.DataModel;
 
 namespace Titan.Blog.WebAPP.Controllers.v2
 {
@@ -23,10 +20,8 @@ namespace Titan.Blog.WebAPP.Controllers.v2
     public class ImageTestController : ApiControllerBase
     {
         //构造函数注入上下文
-        private readonly AuthorDomainSvc _authorSvc;
-        public ImageTestController(AuthorDomainSvc authorSvc)
+        public ImageTestController()
         {
-            _authorSvc = authorSvc;
         }
 
         /// <summary>
@@ -67,7 +62,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         /// </remarks>
         [Produces("application/json")]//Swagger可以根据这个来自动选择请求类型
         [HttpPost("EFCoreTest", Name = "EFCoreTest")]
-        public OpResult<List<Author>> EFCoreTest(string id)
+        public OpResult<string> EFCoreTest(string id)
         {
             //ModelBaseContext fds = new ModelBaseContext(new DbContextOptions<ModelBaseContext>());
             //AuthorDomainSvc _authorSvc = new AuthorDomainSvc();
@@ -75,7 +70,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
             //var data = _authorSvc.SqlTest();
             //var ok = _authorSvc.CommandSql();
             //var employee = new List<Author>();
-            return new OpResult<List<Author>>(OpResultType.Success, "", new List<Author>());
+            return new OpResult<string>(OpResultType.Success, "", "1111");
 
             //using (var tran = _context.Database.BeginTransaction())
             //{

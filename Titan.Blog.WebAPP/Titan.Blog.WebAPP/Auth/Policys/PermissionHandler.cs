@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using Titan.Blog.AppService.DomainService;
+using Titan.Blog.IAppService;
 
 namespace Titan.Blog.WebAPP.Auth.Policys
 {
@@ -17,29 +17,29 @@ namespace Titan.Blog.WebAPP.Auth.Policys
         /// <summary>
         /// 验证方案提供对象
         /// </summary>
-        public IAuthenticationSchemeProvider Schemes { get; set; }
+        private readonly IAuthenticationSchemeProvider Schemes;
 
         /// <summary>
         /// services 层注入
         /// </summary>
-        public AuthorDomainSvc _authorDomainSvc { get; set; }
+        private readonly IMainServices _IMainServices;
 
         /// <summary>
         /// 构造函数注入
         /// </summary>
         /// <param name="schemes"></param>
         /// <param name="roleModulePermissionServices"></param>
-        public PermissionHandler(IAuthenticationSchemeProvider schemes, AuthorDomainSvc authorDomainSvc)
+        public PermissionHandler(IAuthenticationSchemeProvider schemes, IMainServices iMainServices)
         {
             Schemes = schemes;
-            _authorDomainSvc = authorDomainSvc;
+            _IMainServices = iMainServices;
         }
 
         // 重载异步处理程序--这个是自定义的权限拦截器，[Authorize("Permission")] 标记了这个特性的所有接口都走这个里面验证接口权限
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
         {
             // 将最新的角色和接口列表更新
-            var data = await _authorDomainSvc.GeRoleModule();
+            var data = await _IMainServices.GeRoleModule();
             var list = (from item in data
                         select new Permission
                         {

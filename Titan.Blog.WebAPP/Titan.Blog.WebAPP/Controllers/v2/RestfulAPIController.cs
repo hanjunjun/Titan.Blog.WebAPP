@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Titan.Blog.AppService.DomainService;
-using Titan.Blog.AppService.ModelDTO;
-using Titan.Blog.AppService.ModelService;
-using Titan.Blog.Infrastructure.Data;
-using Titan.Blog.Model.CommonModel;
+using System.Collections.Generic;
+using Castle.Components.DictionaryAdapter;
+using Titan.Blog.IAppService;
+using Titan.Blog.Model.DTOModel;
+using Titan.Blog.Model.ResultModel;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
 
@@ -21,10 +20,10 @@ namespace Titan.Blog.WebAPP.Controllers.v2
     {
         #region 成员、构造函数注入
 
-        private readonly AuthorDomainSvc _authorDomainSvc;
-        public RestfulAPIController(AuthorDomainSvc authorDomainSvc)
+        private readonly IMainServices _iMainServices;
+        public RestfulAPIController(IMainServices iMainServices)
         {
-            _authorDomainSvc = authorDomainSvc;
+            _iMainServices = iMainServices;
         }
         #endregion
 
@@ -76,10 +75,10 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         /// </summary>
         /// <returns></returns>
         [HttpGet(Name = "GetUser")]
-        public OpResult<List<SysUserDto>> GetUser()
+        public OpResult<string> GetUser()
         {
-            var data = _authorDomainSvc.GetSysUserListDto();
-            return new OpResult<List<SysUserDto>>(OpResultType.Success, "获取数据成功！", data);
+            //var data = _iMainServices.GetSysUserListDto();
+            return new OpResult<string>(OpResultType.Success, "获取数据成功！", "张三");
         }
 
         /// <summary>

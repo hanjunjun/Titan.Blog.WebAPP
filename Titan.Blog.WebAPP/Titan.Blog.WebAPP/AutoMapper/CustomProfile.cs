@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Titan.Blog.Model.DataModel;
+using Titan.Blog.Model.DTOModel;
 
 namespace Titan.Blog.WebAPP.AutoMapper
 {
@@ -9,8 +11,8 @@ namespace Titan.Blog.WebAPP.AutoMapper
         /// </summary>
         public CustomProfile()
         {
-            //CreateMap<SysRoleModuleButton, SysRoleModuleButtonDto>();
-            //CreateMap<SysUser, SysUserDto>();
+            CreateMap<SysRoleModuleButton, SysRoleModuleButtonDto>();
+            CreateMap<SysUser, SysUserDto>();
         }
     }
 }

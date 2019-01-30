@@ -14,6 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Titan.Blog.IAppService.Base;
 using Titan.Blog.Model.DataModel;
+using Titan.Blog.Model.DTOModel;
+using Titan.Blog.Model.ResultModel;
 
 namespace Titan.Blog.IAppService
 {
@@ -23,5 +25,7 @@ namespace Titan.Blog.IAppService
         Task<Tuple<List<Main>, int>> GetList();
 
         Task<Tuple<List<Children>, int>> QueryAsNotraking();
+        Task<List<SysRoleModuleButtonDto>> GeRoleModule();
+        Task<Tuple<OpResult<string>, SysUser>> VerifyPassword(string userId, string userPwd);
     }
 }

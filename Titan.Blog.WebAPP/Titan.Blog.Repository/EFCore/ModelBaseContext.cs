@@ -11,7 +11,7 @@ namespace Titan.Blog.Repository.EFCore
         //    : base(options)
         //{
         //}
-
+        public Guid Test= Guid.NewGuid();
         public virtual DbSet<Children> Children { get; set; }
         public virtual DbSet<Main> Main { get; set; }
         public virtual DbSet<SysButton> SysButton { get; set; }
@@ -226,6 +226,10 @@ namespace Titan.Blog.Repository.EFCore
                     .IsUnicode(false);
 
                 entity.Property(e => e.UserId)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserName)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 

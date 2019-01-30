@@ -86,7 +86,7 @@ namespace Titan.Blog.Repository.Base
         /// <returns></returns>
         public async Task<List<T>> QueryBySql(string querySql)
         {
-            return await Task.Run(() => _context.Set<T>().FromSql(querySql).ToList());
+            return await Task.Run(() => GetObjectSet().FromSql(querySql).ToList());
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Titan.Blog.Repository.Base
         /// <returns></returns>
         public async Task<List<T>> QueryBySql(string querySql, int pageIndex, int pageSize)
         {
-            return await Task.Run(() => _context.Set<T>().FromSql(querySql).Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList());
+            return await Task.Run(() => GetObjectSet().FromSql(querySql).Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList());
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Titan.Blog.Repository.Base
         /// <returns></returns>
         public async Task<List<T>> Query()
         {
-            return await Task.Run(() => _context.Set<T>().ToList());
+            return await Task.Run(() => GetObjectSet().ToList());
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace Titan.Blog.Repository.Base
         /// <returns></returns>
         public async Task<List<T>> Query(int pageIndex, int pageSize)
         {
-            return await Task.Run(() => _context.Set<T>().Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList());
+            return await Task.Run(() => GetObjectSet().Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList());
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Titan.Blog.Repository.Base
         /// <returns></returns>
         public async Task<List<T>> Query(Expression<Func<T, bool>> where)
         {
-            return await Task.Run(() => _context.Set<T>().Where(where).ToList());
+            return await Task.Run(() => GetObjectSet().Where(where).ToList());
         }
 
         public async Task<Tuple<List<T>, int>> Query(Expression<Func<T, bool>> where, int pageIndex, int pageSize)
@@ -170,7 +170,7 @@ namespace Titan.Blog.Repository.Base
             {
                 var list = GetObjectSet();
                 if (where != null)
-                    list = _context.Set<T>().Where(where);
+                    list = GetObjectSet().Where(where);
                 list = list.Skip(pageSize * (pageIndex - 1)).Take(pageSize);
                 return new Tuple<List<T>, int>(list.ToList(), list.Count());
             });
@@ -215,16 +215,16 @@ namespace Titan.Blog.Repository.Base
                     if (orderBy2 != null)
                     {
                         if (isAsc)
-                            return _context.Set<T>().Where(where).OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).ToList();
+                            return GetObjectSet().Where(where).OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).ToList();
                         else
-                            return _context.Set<T>().Where(where).OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2).ToList();
+                            return GetObjectSet().Where(where).OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2).ToList();
                     }
                     else
                     {
                         if (isAsc)
-                            return _context.Set<T>().Where(where).OrderBy<T, A>(orderBy1).ToList();
+                            return GetObjectSet().Where(where).OrderBy<T, A>(orderBy1).ToList();
                         else
-                            return _context.Set<T>().Where(where).OrderByDescending<T, A>(orderBy1).ToList();
+                            return GetObjectSet().Where(where).OrderByDescending<T, A>(orderBy1).ToList();
                     }
                 }
                 else
@@ -232,13 +232,13 @@ namespace Titan.Blog.Repository.Base
                     if (orderBy2 != null)
                     {
                         if (isAsc)
-                            return _context.Set<T>().Where(where).OrderBy<T, A>(orderBy2).ToList();
+                            return GetObjectSet().Where(where).OrderBy<T, A>(orderBy2).ToList();
                         else
-                            return _context.Set<T>().Where(where).OrderByDescending<T, A>(orderBy2).ToList();
+                            return GetObjectSet().Where(where).OrderByDescending<T, A>(orderBy2).ToList();
                     }
                     else
                     {
-                        return _context.Set<T>().Where(where).ToList();//排序都为null
+                        return GetObjectSet().Where(where).ToList();//排序都为null
                     }
                 }
             });
@@ -250,7 +250,7 @@ namespace Titan.Blog.Repository.Base
             {
                 var list = GetObjectSet();
                 if (where != null)
-                    list = _context.Set<T>().Where(where);
+                    list = GetObjectSet().Where(where);
                 if (orderBy1 != null)
                 {
                     if (orderBy2 != null)
@@ -289,7 +289,7 @@ namespace Titan.Blog.Repository.Base
         {
             return await Task.Run(() =>
             {
-                var list = _context.Set<T>().Where(where);
+                var list = GetObjectSet().Where(where);
                 if (orderBy1 != null)
                 {
                     if (orderBy2 != null)
@@ -328,7 +328,7 @@ namespace Titan.Blog.Repository.Base
         {
             return await Task.Run(() =>
             {
-                var list = _context.Set<T>().Where(where);
+                var list = GetObjectSet().Where(where);
                 if (orderBy1 != null)
                 {
                     if (orderBy2 != null)
@@ -366,15 +366,15 @@ namespace Titan.Blog.Repository.Base
         {
             return await Task.Run(() =>
             {
-                var list = _context.Set<T>().Where(where);
+                var list = GetObjectSet().Where(where);
                 if (orderBy1 != null)
                 {
                     if (orderBy2 != null)
                     {
                         if (isAsc)
-                            return _context.Set<T>().Where(where).OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).ToList();
+                            return GetObjectSet().Where(where).OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).ToList();
                         else
-                            return _context.Set<T>().Where(where).OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).ToList();
+                            return GetObjectSet().Where(where).OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).ToList();
                     }
                     else
                     {
@@ -389,13 +389,13 @@ namespace Titan.Blog.Repository.Base
                     if (orderBy2 != null)
                     {
                         if (isAsc)
-                            return _context.Set<T>().Where(where).OrderBy<T, B>(orderBy2).ToList();
+                            return GetObjectSet().Where(where).OrderBy<T, B>(orderBy2).ToList();
                         else
-                            return _context.Set<T>().Where(where).OrderByDescending<T, B>(orderBy2).ToList();
+                            return GetObjectSet().Where(where).OrderByDescending<T, B>(orderBy2).ToList();
                     }
                     else
                     {
-                        return _context.Set<T>().Where(where).ToList();
+                        return GetObjectSet().Where(where).ToList();
                     }
                 }
             });
@@ -405,7 +405,7 @@ namespace Titan.Blog.Repository.Base
         {
             return await Task.Run(() =>
             {
-                var list = _context.Set<T>().Where(where);
+                var list = GetObjectSet().Where(where);
                 if (orderBy1 != null)
                 {
                     if (orderBy2 != null)
@@ -433,7 +433,7 @@ namespace Titan.Blog.Repository.Base
             {
                 var list = GetObjectSet();
                 if (where != null)
-                    list = _context.Set<T>().Where(where);
+                    list = GetObjectSet().Where(where);
                 if (orderBy1 != null)
                 {
                     if (orderBy2 != null)
@@ -479,7 +479,7 @@ namespace Titan.Blog.Repository.Base
             {
                 var list = GetObjectSet();
                 if (where != null)
-                    list = _context.Set<T>().Where(where);
+                    list = GetObjectSet().Where(where);
                 if (orderBy1 != null)
                 {
                     if (orderBy2 != null)
@@ -516,43 +516,124 @@ namespace Titan.Blog.Repository.Base
         #endregion
 
         #region AsNoTracking非跟踪查询
+        /// <summary>
+        /// 根据主键Id查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<T> QueryAsNoTrackingById(TEntityKey id)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() => _context.Set<T>().Find(id));
         }
+
+        /// <summary>
+        /// 查询所有数据
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<T>> QueryAsNoTracking()
         {
-            return await Task.Run(() => _context.Set<T>().AsNoTracking().ToList());
+            return await Task.Run(() => GetObjectSet().AsNoTracking().ToList());
         }
 
+        /// <summary>
+        /// 分页查询<see cref="T"/>所有数据
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<List<T>> QueryAsNoTracking(int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() => GetObjectSet().Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList());
         }
 
+        /// <summary>
+        /// 根据条件查询
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
         public async Task<List<T>> QueryAsNoTracking(Expression<Func<T, bool>> where)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() => GetObjectSet().Where(where).AsNoTracking().ToList());
         }
 
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking(Expression<Func<T, bool>> where, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet();
+                if (where != null)
+                    list = GetObjectSet().Where(where);
+                list = list.Skip(pageSize * (pageIndex - 1)).Take(pageSize);
+                return new Tuple<List<T>, int>(list.AsNoTracking().ToList(), list.Count());
+            });
         }
 
         public async Task<List<T>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                if (isAsc)
+                {
+                    return GetObjectSet().Where(where).OrderBy(orderBy1).AsNoTracking().ToList();
+                }
+                else
+                {
+                    return GetObjectSet().Where(where).OrderByDescending(orderBy1).AsNoTracking().ToList();
+                }
+            });
         }
 
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                if (isAsc)
+                {
+                    return new Tuple<List<T>, int>(GetObjectSet().Where(where).OrderBy(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), GetObjectSet().Where(where).Count());
+                }
+                else
+                {
+                    return new Tuple<List<T>, int>(GetObjectSet().Where(where).OrderByDescending(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), GetObjectSet().Where(where).Count());
+                }
+            });
         }
 
         public async Task<List<T>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (isAsc)
+                            return GetObjectSet().Where(where).OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).AsNoTracking().ToList();
+                        else
+                            return GetObjectSet().Where(where).OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2).AsNoTracking().ToList();
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return GetObjectSet().Where(where).OrderBy<T, A>(orderBy1).AsNoTracking().ToList();
+                        else
+                            return GetObjectSet().Where(where).OrderByDescending<T, A>(orderBy1).AsNoTracking().ToList();
+                    }
+                }
+                else
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (isAsc)
+                            return GetObjectSet().Where(where).OrderBy<T, A>(orderBy2).AsNoTracking().ToList();
+                        else
+                            return GetObjectSet().Where(where).OrderByDescending<T, A>(orderBy2).AsNoTracking().ToList();
+                    }
+                    else
+                    {
+                        return GetObjectSet().Where(where).AsNoTracking().ToList();//排序都为null
+                    }
+                }
+            });
         }
 
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
@@ -561,22 +642,22 @@ namespace Titan.Blog.Repository.Base
             {
                 var list = GetObjectSet();
                 if (where != null)
-                    list = _context.Set<T>().Where(where);
+                    list = GetObjectSet().Where(where);
                 if (orderBy1 != null)
                 {
                     if (orderBy2 != null)
                     {
                         if (isAsc)
-                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
                         else
-                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
                     }
                     else
                     {
                         if (isAsc)
-                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
                         else
-                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
                     }
                 }
                 else
@@ -584,13 +665,13 @@ namespace Titan.Blog.Repository.Base
                     if (orderBy2 != null)
                     {
                         if (isAsc)
-                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
                         else
-                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
                     }
                     else
                     {
-                        return new Tuple<List<T>, int>(list.Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable().AsNoTracking().ToList(), list.AsQueryable().AsNoTracking().Count());
+                        return new Tuple<List<T>, int>(list.Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
                     }
                 }
             });
@@ -598,32 +679,231 @@ namespace Titan.Blog.Repository.Base
 
         public async Task<List<T>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet().Where(where);
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (orderBy3 != null)
+                        {
+                            if (isAsc)
+                                return list.OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).ThenBy<T, A>(orderBy3)
+                                    .AsNoTracking().ToList();
+                            else
+                                return list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2)
+                                    .ThenByDescending<T, A>(orderBy3).AsNoTracking().ToList();
+                        }
+                        else
+                        {
+                            if (isAsc)
+                                return list.OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).AsNoTracking().ToList();
+                            else
+                                return list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2).AsNoTracking().ToList();
+                        }
+
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return list.OrderBy<T, A>(orderBy1).AsNoTracking().ToList();
+                        else
+                            return list.OrderByDescending<T, A>(orderBy1).AsNoTracking().ToList();
+                    }
+                }
+                return list.AsNoTracking().ToList();
+            });
         }
 
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet().Where(where);
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (orderBy3 != null)
+                        {
+                            if (isAsc)
+                                return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).ThenBy<T, A>(orderBy3).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                            else
+                                return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2)
+                                    .ThenByDescending<T, A>(orderBy3).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                        }
+                        else
+                        {
+                            if (isAsc)
+                                return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                            else
+                                return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, A>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                        }
+
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                        else
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                    }
+                }
+                return new Tuple<List<T>, int>(list.Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+            });
         }
 
         public async Task<List<T>> QueryAsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet().Where(where);
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (isAsc)
+                            return GetObjectSet().Where(where).OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).AsNoTracking().ToList();
+                        else
+                            return GetObjectSet().Where(where).OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).AsNoTracking().ToList();
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return list.OrderBy<T, A>(orderBy1).AsNoTracking().ToList();
+                        else
+                            return list.OrderByDescending<T, A>(orderBy1).AsNoTracking().ToList();
+                    }
+                }
+                else
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (isAsc)
+                            return GetObjectSet().Where(where).OrderBy<T, B>(orderBy2).AsNoTracking().ToList();
+                        else
+                            return GetObjectSet().Where(where).OrderByDescending<T, B>(orderBy2).AsNoTracking().ToList();
+                    }
+                    else
+                    {
+                        return GetObjectSet().Where(where).AsNoTracking().ToList();
+                    }
+                }
+            });
         }
 
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet().Where(where);
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (isAsc)
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                        else
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                        else
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsNoTracking().ToList(), list.Count());
+                    }
+                }
+                return new Tuple<List<T>, int>(list.AsNoTracking().ToList(), list.Count());
+            });
         }
 
         public async Task<List<T>> QueryAsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet();
+                if (where != null)
+                    list = GetObjectSet().Where(where);
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (orderBy3 != null)
+                        {
+                            if (isAsc)
+                                return list.OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).ThenBy<T, C>(orderBy3)
+                                    .AsNoTracking().ToList();
+                            else
+                            {
+                                return list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2)
+                                    .ThenByDescending<T, C>(orderBy3).AsNoTracking().ToList();
+                            }
+
+
+                        }
+                        else
+                        {
+                            if (isAsc)
+                                return list.OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).AsNoTracking().ToList();
+                            else
+                                return list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).AsNoTracking().ToList();
+                        }
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return list.OrderBy<T, A>(orderBy1).AsNoTracking().ToList();
+                        else
+                            return list.OrderByDescending<T, A>(orderBy1).AsNoTracking().ToList();
+                    }
+
+                }
+
+                return list.AsNoTracking().ToList();
+            });
         }
 
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() =>
+            {
+                var list = GetObjectSet();
+                if (where != null)
+                    list = GetObjectSet().Where(where);
+                if (orderBy1 != null)
+                {
+                    if (orderBy2 != null)
+                    {
+                        if (orderBy3 != null)
+                        {
+                            if (isAsc)
+                                return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).ThenBy<T, C>(orderBy3).AsNoTracking().ToList(), list.Count());
+                            else
+                            {
+                                return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).ThenByDescending<T, C>(orderBy3).AsNoTracking().AsNoTracking().ToList(), list.Count());
+                            }
+                        }
+                        else
+                        {
+                            if (isAsc)
+                                return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).ThenBy<T, B>(orderBy2).AsNoTracking().ToList(), list.Count());
+                            else
+                                return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).ThenByDescending<T, B>(orderBy2).AsNoTracking().ToList(), list.Count());
+                        }
+                    }
+                    else
+                    {
+                        if (isAsc)
+                            return new Tuple<List<T>, int>(list.OrderBy<T, A>(orderBy1).AsNoTracking().ToList(), list.Count());
+                        else
+                            return new Tuple<List<T>, int>(list.OrderByDescending<T, A>(orderBy1).AsNoTracking().ToList(), list.Count());
+                    }
+
+                }
+                return new Tuple<List<T>, int>(list.AsNoTracking().ToList(), list.Count());
+            });
         }
         #endregion
 

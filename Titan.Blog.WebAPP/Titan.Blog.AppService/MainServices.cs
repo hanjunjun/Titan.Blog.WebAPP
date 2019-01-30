@@ -85,6 +85,9 @@ namespace Titan.Blog.AppService
             var put = data.Item1.FirstOrDefault();
             put.Name = "非跟踪更新";
             await _iChildrenRepository.Update(put);
+             var test =  _iChildrenRepository.QueryAsNoTracking(x => x.Id == 1).Result.FirstOrDefault();
+            test.Name = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            await _iChildrenRepository.Update(test);
             return data;
         }
 
@@ -101,21 +104,27 @@ namespace Titan.Blog.AppService
             {
                 foreach (var item in roleModuleButton)
                 {
-                    item.SysRole = _iSysRoleRepository.QueryBySql($"select * from SysRole where SysRoleId={item.SysRoleId} and IsDelete!=1 and RoleStatus=1").Result.FirstOrDefault();
-                    item.SysModule = _iSysModuleRepository.QueryBySql($"select * from SysModule where SysModuleId={item.SysModuleId} and ModuleStatus=1 and IsDelete!=1").Result.FirstOrDefault();
+                    item.SysRole = _iSysRoleRepository.QueryBySql($"select * from SysRole where SysRoleId='{item.SysRoleId}' and IsDelete!=1 and RoleStatus=1").Result.FirstOrDefault();
+                    item.SysModule = _iSysModuleRepository.QueryBySql($"select * from SysModule where SysModuleId='{item.SysModuleId}' and ModuleStatus=1 and IsDelete!=1").Result.FirstOrDefault();
                 }
 
             }
             return roleModuleButton;
         }
 
+        /// <summary>
+        /// 登录验证帐号和密码
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="userPwd"></param>
+        /// <returns></returns>
         public async Task<Tuple<OpResult<string>, SysUser>> VerifyPassword(string userId, string userPwd)
         {
-            var userInfo = await _iSysUserRepository.QueryBySql($"select * from SysUser where UserId={userId} and UserPwd={userPwd} and UserStatus=1");//验证用户id和密码
+            var userInfo = await _iSysUserRepository.QueryBySql($"select * from SysUser where UserId='{userId}' and UserPwd='{userPwd}' and UserStatus=1");//验证用户id和密码
             var sysUser = userInfo.FirstOrDefault();
             if (sysUser != null)
             {
-                var roleList = _iSysUserRoleRepository.QueryBySql($"SELECT * from SysUserRole where SysUserId={sysUser.SysUserId}").Result.Select(x => x.SysRoleId).ToList();//获取用户角色
+                var roleList = _iSysUserRoleRepository.QueryBySql($"SELECT * from SysUserRole where SysUserId='{sysUser.SysUserId}'").Result.Select(x => x.SysRoleId).ToList();//获取用户角色
                 var roleNameList = _iSysRoleRepository.QueryAsNoTracking(x => roleList.Contains(x.SysRoleId) && x.IsDelete != true && x.RoleStatus == true).Result.Select(x => x.RoleName).ToList();//获取用户角色名称
                 var roleName = string.Join(',', roleNameList);
                 return new Tuple<OpResult<string>, SysUser>(new OpResult<string>(OpResultType.Success, roleName),sysUser);

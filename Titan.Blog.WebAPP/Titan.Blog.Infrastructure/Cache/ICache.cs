@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Titan.Blog.Infrastructure.Cache
 {
-    interface ICache
+    public interface ICache
     {
+
     }
 }

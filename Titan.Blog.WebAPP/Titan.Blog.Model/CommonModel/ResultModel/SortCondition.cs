@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Titan.Blog.Model.ResultModel
+namespace Titan.Blog.Model.CommonModel.ResultModel
 {
     /// <summary>
     /// 列表字段排序条件

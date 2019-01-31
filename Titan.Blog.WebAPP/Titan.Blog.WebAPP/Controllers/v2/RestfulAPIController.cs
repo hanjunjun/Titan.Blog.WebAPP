@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Castle.Components.DictionaryAdapter;
 using Titan.Blog.IAppService;
+using Titan.Blog.Model.CommonModel.ResultModel;
 using Titan.Blog.Model.DTOModel;
-using Titan.Blog.Model.ResultModel;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
 

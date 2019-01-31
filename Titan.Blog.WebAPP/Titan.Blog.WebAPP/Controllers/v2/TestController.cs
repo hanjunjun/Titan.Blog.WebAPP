@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Titan.Blog.Model.CommonModel;
-using Titan.Blog.Model.ResultModel;
+using Titan.Blog.Model.CommonModel.ResultModel;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
 

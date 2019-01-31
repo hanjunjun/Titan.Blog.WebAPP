@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace Titan.Blog.Model.ResultModel
+namespace Titan.Blog.Model.CommonModel.ResultModel
 {
     /// <summary>
     /// 操作结果

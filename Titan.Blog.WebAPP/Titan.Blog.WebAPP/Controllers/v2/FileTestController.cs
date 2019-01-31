@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Titan.Blog.Infrastructure.File;
-using Titan.Blog.Model.ResultModel;
+using Titan.Blog.Model.CommonModel.ResultModel;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
 

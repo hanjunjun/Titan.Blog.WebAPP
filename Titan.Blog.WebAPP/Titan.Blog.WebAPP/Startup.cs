@@ -25,10 +25,10 @@ using System.Text.Unicode;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Caching.Memory;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Titan.Blog.Infrastructure.HttpExtenions;
 using Titan.Blog.Infrastructure.Log;
-using Titan.Blog.Infrastructure.Redis;
 using Titan.Blog.WebAPP.Filter;
 using Titan.Blog.WebAPP.Swagger;
 //using Titan.Model.DataModel;
@@ -42,7 +42,9 @@ using RazorEngine.Templating;
 using RazorEngine.Configuration;
 using RazorEngine;
 using RazorEngine.Text;
+using Titan.Blog.Infrastructure.Cache;
 using Titan.Blog.IRepository.Base;
+using Titan.Blog.Model.CommonModel.Enums;
 using Titan.Blog.WebAPP.AOP;
 using Titan.Blog.WebAPP.AutoMapper;
 
@@ -99,8 +101,27 @@ namespace Titan.Blog.WebAPP
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             #endregion
 
-            #region Redis缓存
-            services.AddScoped<IRedisCacheManager, RedisCacheManager>();
+            #region Redis缓存策略
+
+            var cacheConfig =
+                (CacheType) Enum.Parse(typeof(CacheType), Configuration.GetSection("AppSettings")["CacheType"]);
+            switch (cacheConfig)
+            {
+                case CacheType.InMemory:
+                    //net本地内存缓存
+                    services.AddScoped<ICache, Infrastructure.Cache.MemoryCache>();
+                    services.AddSingleton((Func<IServiceProvider, IMemoryCache>)(factory =>
+                    {
+                        var cache = new Microsoft.Extensions.Caching.Memory.MemoryCache(new MemoryCacheOptions());
+                        return cache;
+                    }));
+                    break;
+                case CacheType.Redis:
+                    //redis 分布式缓存
+                    services.AddScoped<ICache, RedisCache>();
+                    break;
+            }
+            
             #endregion
 
             #region Log4Net日志
@@ -245,7 +266,7 @@ namespace Titan.Blog.WebAPP
                 audienceConfig["Issuer"], //发行人
                 audienceConfig["Audience"], //听众
                 signingCredentials, //签名凭据
-                expiration: TimeSpan.FromSeconds(60 * 60) //接口的过期时间
+                expiration: TimeSpan.FromSeconds(60 * 60) //接口的过期时间单位秒，1分钟*60=1小时
             );
 
             //加载角色策略 一个策略对应多个角色，一个角色可以对应多个策略，一个人可以有多个角色

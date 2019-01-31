@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Castle.DynamicProxy;
 using Newtonsoft.Json;
 using Titan.Blog.Infrastructure.Attribute;
-using Titan.Blog.Infrastructure.Redis;
+using Titan.Blog.Infrastructure.Cache;
 
 namespace Titan.Blog.WebAPP.AOP
 {
@@ -14,12 +14,10 @@ namespace Titan.Blog.WebAPP.AOP
     public class BlogCacheAOP : IInterceptor
     {
         //通过注入的方式，把缓存操作接口通过构造函数注入
-        //private ICaching _cache;
-        private IRedisCacheManager _redisCache;
-        public BlogCacheAOP(/*ICaching cache,*/ IRedisCacheManager redisCache)
+        private readonly ICache _cache;
+        public BlogCacheAOP(ICache cache)
         {
-            //_cache = cache;
-            _redisCache = redisCache;
+            _cache = cache;
         }
         //Intercept方法是拦截的关键所在，也是IInterceptor接口中的唯一定义
         public void Intercept(IInvocation invocation)
@@ -42,7 +40,7 @@ namespace Titan.Blog.WebAPP.AOP
         {
             //获取自定义缓存键
             var cacheKey = CustomCacheKey(invocation);
-            var cacheValue = _redisCache.Get(cacheKey);
+            var cacheValue = _cache.GetExists(cacheKey);
             //判断redis中是否存在值
             if (cacheValue)
             {
@@ -60,7 +58,7 @@ namespace Titan.Blog.WebAPP.AOP
                     if (resultTypes.Any())
                     {
                         var resultType = resultTypes.FirstOrDefault();
-                        var data = _redisCache.GetValue(cacheKey);
+                        var data = _cache.Get(cacheKey);
                         dynamic temp = JsonConvert.DeserializeObject(data, resultType);
                         //dynamic temp = System.Convert.ChangeType(cacheValue, resultType);
                         // System.Convert.ChangeType(Task.FromResult(temp), type);
@@ -76,7 +74,7 @@ namespace Titan.Blog.WebAPP.AOP
                 {
                     //var data = _redisCache.Get<object>(cacheKey);
                     //response = System.Convert.ChangeType(data, type);
-                    var data = _redisCache.GetValue(cacheKey);
+                    var data = _cache.Get(cacheKey);
                     dynamic temp = JsonConvert.DeserializeObject(data, type);//不存task返回类型就直接用返回类型反序列化
                     response = System.Convert.ChangeType(temp, type);
                 }
@@ -104,7 +102,7 @@ namespace Titan.Blog.WebAPP.AOP
                     response = invocation.ReturnValue;
                 }
                 if (response == null) response = string.Empty;
-                _redisCache.Set(cacheKey, response, cacheAttribute.AbsoluteExpiration);
+                _cache.Set(cacheKey, response, TimeSpan.FromMinutes(cacheAttribute.AbsoluteExpiration));
             }
         }
 

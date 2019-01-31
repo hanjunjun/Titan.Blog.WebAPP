@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Titan.Blog.Model.ResultModel;
+using Titan.Blog.Model.CommonModel.ResultModel;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
 

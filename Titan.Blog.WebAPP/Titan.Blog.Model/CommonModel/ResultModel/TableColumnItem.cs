@@ -1,4 +1,4 @@
-﻿namespace Titan.Blog.Model.ResultModel
+﻿namespace Titan.Blog.Model.CommonModel.ResultModel
 {
     /// <summary>
     /// 列表信息的列头设置

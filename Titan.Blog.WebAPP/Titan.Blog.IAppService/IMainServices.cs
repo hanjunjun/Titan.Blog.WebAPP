@@ -13,9 +13,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Titan.Blog.IAppService.Base;
+using Titan.Blog.Model.CommonModel.ResultModel;
 using Titan.Blog.Model.DataModel;
 using Titan.Blog.Model.DTOModel;
-using Titan.Blog.Model.ResultModel;
 
 namespace Titan.Blog.IAppService
 {

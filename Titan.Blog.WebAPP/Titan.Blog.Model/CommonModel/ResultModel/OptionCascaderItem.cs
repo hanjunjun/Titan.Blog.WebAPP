@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Titan.Blog.Model.ResultModel
+namespace Titan.Blog.Model.CommonModel.ResultModel
 {
     /// <summary>
     /// 级联可选项目

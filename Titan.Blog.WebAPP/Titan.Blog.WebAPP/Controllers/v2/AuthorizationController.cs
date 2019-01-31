@@ -12,11 +12,11 @@ using Titan.Blog.Infrastructure.AutoMapper;
 using Titan.Blog.Infrastructure.Serializable;
 using Titan.Blog.Model.DataModel;
 using Titan.Blog.Model.DTOModel;
-using Titan.Blog.Model.ResultModel;
 using Titan.Blog.WebAPP.Auth.Policys;
 using Titan.Blog.WebAPP.Extensions;
 using Titan.Blog.WebAPP.Swagger;
 using Titan.Blog.Model.CommonModel;
+using Titan.Blog.Model.CommonModel.ResultModel;
 
 namespace Titan.Blog.WebAPP.Controllers.v2
 {
@@ -33,7 +33,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         private readonly IMainServices _iMainServices;
         private readonly IChildrenServices _iChildrenServices;
         public AuthorizationController(PermissionRequirement permissionRequirement, IMainServices iMainServices/*, AuthorDomainSvc authorDomainSvc*/
-            , IChildrenServices iChildrenServices,string test)
+            , IChildrenServices iChildrenServices)
         {
             _permissionRequirement = permissionRequirement;
             //_authorDomainSvc = authorDomainSvc;

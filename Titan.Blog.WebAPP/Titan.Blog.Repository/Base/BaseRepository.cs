@@ -164,6 +164,13 @@ namespace Titan.Blog.Repository.Base
             return await Task.Run(() => GetObjectSet().Where(where).ToList());
         }
 
+        /// <summary>
+        /// 根据条件分页查询
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> Query(Expression<Func<T, bool>> where, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -176,6 +183,14 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
         {
             return await Task.Run(() =>
@@ -191,6 +206,16 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -206,6 +231,15 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/><see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
         {
             return await Task.Run(() =>
@@ -244,6 +278,17 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/><see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -285,6 +330,16 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/><see cref="A"/><see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="orderBy3"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
         {
             return await Task.Run(() =>
@@ -324,6 +379,18 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/><see cref="A"/><see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="orderBy3"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> Query<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -362,6 +429,16 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/><see cref="B"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
         {
             return await Task.Run(() =>
@@ -401,6 +478,18 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/><see cref="B"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> Query<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -427,6 +516,18 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/><see cref="B"/><see cref="C"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <typeparam name="C"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="orderBy3"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
         {
             return await Task.Run(() =>
@@ -473,6 +574,20 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/><see cref="B"/><see cref="C"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <typeparam name="C"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="orderBy3"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> Query<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -556,6 +671,13 @@ namespace Titan.Blog.Repository.Base
             return await Task.Run(() => GetObjectSet().Where(where).AsNoTracking().ToList());
         }
 
+        /// <summary>
+        /// 根据条件分页查询
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking(Expression<Func<T, bool>> where, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -568,6 +690,14 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc)
         {
             return await Task.Run(() =>
@@ -583,6 +713,16 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -598,6 +738,15 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/><see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc)
         {
             return await Task.Run(() =>
@@ -636,6 +785,17 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/><see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -677,6 +837,16 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/><see cref="A"/><see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="orderBy3"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc)
         {
             return await Task.Run(() =>
@@ -716,6 +886,18 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/><see cref="A"/><see cref="A"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="orderBy3"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, A>> orderBy2, Expression<Func<T, A>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -754,6 +936,16 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/><see cref="B"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> QueryAsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc)
         {
             return await Task.Run(() =>
@@ -793,6 +985,18 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/><see cref="B"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A, B>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>
@@ -819,6 +1023,18 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件查询、并按照<see cref="A"/><see cref="B"/><see cref="C"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <typeparam name="C"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="orderBy3"></param>
+        /// <param name="isAsc"></param>
+        /// <returns></returns>
         public async Task<List<T>> QueryAsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc)
         {
             return await Task.Run(() =>
@@ -865,6 +1081,20 @@ namespace Titan.Blog.Repository.Base
             });
         }
 
+        /// <summary>
+        /// 根据条件分页查询、并按照<see cref="A"/><see cref="B"/><see cref="C"/>排序
+        /// </summary>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <typeparam name="C"></typeparam>
+        /// <param name="where"></param>
+        /// <param name="orderBy1"></param>
+        /// <param name="orderBy2"></param>
+        /// <param name="orderBy3"></param>
+        /// <param name="isAsc"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<T>, int>> QueryAsNoTracking<A, B, C>(Expression<Func<T, bool>> where, Expression<Func<T, A>> orderBy1, Expression<Func<T, B>> orderBy2, Expression<Func<T, C>> orderBy3, bool isAsc, int pageIndex, int pageSize)
         {
             return await Task.Run(() =>

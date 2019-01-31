@@ -11,7 +11,7 @@ namespace Titan.Blog.Repository.EFCore
         //    : base(options)
         //{
         //}
-        public Guid Test= Guid.NewGuid();
+        public Guid ATest= Guid.NewGuid();//测试同一次请求使用的上下文，是不是同一个
         public virtual DbSet<Children> Children { get; set; }
         public virtual DbSet<Main> Main { get; set; }
         public virtual DbSet<SysButton> SysButton { get; set; }

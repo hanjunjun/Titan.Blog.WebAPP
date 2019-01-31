@@ -98,4 +98,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\v3\" />
+  </ItemGroup>
+
 </Project>

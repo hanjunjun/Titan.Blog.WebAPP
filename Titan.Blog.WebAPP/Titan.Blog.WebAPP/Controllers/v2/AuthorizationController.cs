@@ -33,7 +33,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         private readonly IMainServices _iMainServices;
         private readonly IChildrenServices _iChildrenServices;
         public AuthorizationController(PermissionRequirement permissionRequirement, IMainServices iMainServices/*, AuthorDomainSvc authorDomainSvc*/
-            , IChildrenServices iChildrenServices)
+            , IChildrenServices iChildrenServices,string test)
         {
             _permissionRequirement = permissionRequirement;
             //_authorDomainSvc = authorDomainSvc;

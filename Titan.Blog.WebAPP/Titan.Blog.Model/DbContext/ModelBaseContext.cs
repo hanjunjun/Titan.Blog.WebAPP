@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Titan.Blog.Model.DataModel;
 
-namespace Titan.Blog.Repository.EFCore
+namespace Titan.Blog.Model.DbContext
 {
-    public partial class ModelBaseContext : DbContext
+    public partial class ModelBaseContext : Microsoft.EntityFrameworkCore.DbContext
     {
         //public ModelBaseContext(DbContextOptions<ModelBaseContext> options)
         //    : base(options)
         //{
         //}
-        //public Guid ATest= Guid.NewGuid();//测试ioc容器同一次请求使用的上下文，是不是同一个
+        public Guid ATest= Guid.NewGuid();//测试ioc容器同一次请求使用的上下文，是不是同一个
         public virtual DbSet<Children> Children { get; set; }
         public virtual DbSet<Main> Main { get; set; }
         public virtual DbSet<SysButton> SysButton { get; set; }

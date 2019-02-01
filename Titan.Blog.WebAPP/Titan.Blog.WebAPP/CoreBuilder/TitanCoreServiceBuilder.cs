@@ -299,7 +299,7 @@ namespace Titan.Blog.WebAPP.CoreBuilder
             var assemblysRepository = Assembly.LoadFile(repositoryDllFile);//Assembly.Load("Titan.Blog.Repository");
             //var assemblysRepository = Assembly.Load("Titan.Blog.Repository");
             builder.RegisterAssemblyTypes(assemblysRepository).Where(x => x.Name.Contains("Repository")).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(assemblysRepository).Where(x => x.Name == "ModelBaseContext").InstancePerLifetimeScope();//注册ef上下文，这里是同一个请求，也就是同一个线程内，保证ef上下文唯一
+            //builder.RegisterAssemblyTypes(assemblysRepository).Where(x => x.Name == "ModelBaseContext").InstancePerLifetimeScope();//注册ef上下文，这里是同一个请求，也就是同一个线程内，保证ef上下文唯一
 
             var servicesDllFile = Path.Combine(basePath, "Titan.Blog.AppService.dll");//获取项目绝对路径
             var assemblysServices = Assembly.LoadFile(servicesDllFile);
@@ -318,8 +318,8 @@ namespace Titan.Blog.WebAPP.CoreBuilder
             //    // 如果你想注入两个，就这么写  InterceptedBy(typeof(BlogCacheAOP), typeof(BlogLogAOP));
             //    .InterceptedBy(typeof(BlogCacheAOP));//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
 
-            //var assemblysModel = Assembly.Load("Titan.Blog.Model");//直接采用加载文件的方法
-            //builder.RegisterAssemblyTypes(assemblysModel);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
+            var assemblysModel = Assembly.Load("Titan.Blog.Model");//直接采用加载文件的方法
+            builder.RegisterAssemblyTypes(assemblysModel).Where(x => x.Name == "ModelBaseContext").InstancePerLifetimeScope();//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
 
             //var assemblysInfrastru = Assembly.Load("Titan.Blog.Infrastructure");//直接采用加载文件的方法
             //builder.RegisterAssemblyTypes(assemblysInfrastru);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
@@ -353,8 +353,8 @@ namespace Titan.Blog.WebAPP.CoreBuilder
             //    .Where(x => x.Activator.LimitType.ToString().Contains("Titan.Blog.AppService")).ToList();
             //var data1 = applicationContainer.ComponentRegistry.Registrations
             //    .Where(x => x.Activator.LimitType.ToString().Contains("BaseRepository")).ToList();
-            //var fff = applicationContainer.ComponentRegistry.Registrations
-            //    .Where(x => x.Activator.LimitType.ToString().Contains("ModelBaseContext")).ToList();
+            var fff = applicationContainer.ComponentRegistry.Registrations
+                .Where(x => x.Activator.LimitType.ToString().Contains("ModelBaseContext")).ToList();
             //var clas1 = applicationContainer.Resolve<AuthorDomainSvc>();
             //Console.WriteLine(clas1.GetList());
             //var efdb= applicationContainer.ResolveOptional<ModelBaseContext>();

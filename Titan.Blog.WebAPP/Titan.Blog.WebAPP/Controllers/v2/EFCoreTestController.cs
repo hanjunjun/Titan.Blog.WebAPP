@@ -68,5 +68,17 @@ namespace Titan.Blog.WebAPP.Controllers.v2
 
             return new OpResult<string>(OpResultType.Success, "操作成功！");
         }
+
+        /// <summary>
+        /// EF事务测试
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("EFTransaction", Name = "EFTransaction")]
+        [AllowAnonymous]
+        public async Task<OpResult<string>> EFTransaction()
+        {
+            await _iMainServices.EFTransactionTest();
+            return new OpResult<string>(OpResultType.Success, "操作成功！");
+        }
     }
 }

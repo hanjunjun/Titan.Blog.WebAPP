@@ -132,5 +132,32 @@ namespace Titan.Blog.AppService
             
             return new Tuple<OpResult<string>, SysUser>(new OpResult<string>(OpResultType.AuthInvalid, "帐号或密码不正确！"), sysUser);
         }
+
+        public async Task EFTransactionTest()
+        {
+            using (var tran = _iMainRepository._context.Database.BeginTransaction())
+            {
+                try
+                {
+                    Random rd = new Random();
+                    var main = new Main();
+                    main.Id = rd.Next();
+                    main.Name = $"{DateTime.Now}";
+                    main.Telphone = "1111";
+                    await _iMainRepository.Add(main);
+                    await _iMainRepository.ExecuteSql($"INSERT INTO [dbo].[Main] ([id], [name], [telphone]) VALUES ('{rd.Next()}', 'test', '21')");
+                    await _iMainRepository.ExecuteSql($"INSERT INTO [dbo].[Main] ([id], [name], [telphone]) VALUES ('{rd.Next()}', 'test', '21')");
+                    await _iMainRepository.ExecuteSql($"INSERT INTO [dbo].[Main] ([id], [name], [telphone]) VALUES ('{rd.Next()}', 'test', '21')");
+                    await _iMainRepository.ExecuteSql($"update [dbo].[Main] set name='事务更新测试'");
+                    var data = await _iMainRepository.QueryAsNoTracking();//await必须加，不然commit提交之后，上下文就被释放了，这个时候_context.data.where()xxx就报错。无法访问的资源。
+                    var test = DateTime.Parse("1111");
+                    tran.Commit();
+                }
+                catch (Exception e)
+                {
+                    tran.Rollback();
+                }
+            }
+        }
     }
 }

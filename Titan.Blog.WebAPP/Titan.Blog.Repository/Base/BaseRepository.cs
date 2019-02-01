@@ -8,25 +8,22 @@
  * 修改原因：
  * Copyright (c) 2017 . All Rights Reserved. 
  * ***********************************************************************/
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Titan.Blog.IRepository.Base;
 using Titan.Blog.Model;
-using Titan.Blog.Model.DataModel;
-using Titan.Blog.Repository.EFCore;
+using Titan.Blog.Model.DbContext;
 
 namespace Titan.Blog.Repository.Base
 {
     public class BaseRepository<T, TEntityKey> : IBaseRepository<T, TEntityKey> where T : AggregateRoot, new()
     {
         #region 成员及构造
-
-        private ModelBaseContext _context;// = DataContextFactory.GetDataContext();//从httpcontext中获取ef上下文
+        public ModelBaseContext _context { get; set; } // = DataContextFactory.GetDataContext();//从httpcontext中获取ef上下文
 
         public BaseRepository(ModelBaseContext contex)
         {

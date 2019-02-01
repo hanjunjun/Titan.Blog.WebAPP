@@ -27,5 +27,7 @@ namespace Titan.Blog.IAppService
         Task<Tuple<List<Children>, int>> QueryAsNotraking();
         Task<List<SysRoleModuleButtonDto>> GeRoleModule();
         Task<Tuple<OpResult<string>, SysUser>> VerifyPassword(string userId, string userPwd);
+
+        Task EFTransactionTest();
     }
 }

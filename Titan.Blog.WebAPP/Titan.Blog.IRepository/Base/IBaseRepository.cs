@@ -4,11 +4,13 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Titan.Blog.Model;
+using Titan.Blog.Model.DbContext;
 
 namespace Titan.Blog.IRepository.Base
 {
     public interface IBaseRepository<T, TEntityKey> where T: AggregateRoot,new()
     {
+        ModelBaseContext _context { get; set; }
         #region 增删改操作
         Task Add(T entity);
         Task Delete(T entity);

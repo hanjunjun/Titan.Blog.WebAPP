@@ -43,15 +43,7 @@ namespace Titan.Blog.WebAPP
 {
     public class Startup
     {
-        #region 仓储 --Log4Net、.Net Core Configuration
-
-        /// <summary>
-        /// log4net 仓储库
-        /// </summary>
-        //public static ILoggerRepository Repository { get; set; }
         private readonly IConfiguration _configuration;
-
-        #endregion
 
         #region .Net Core 启动
         public Startup(IConfiguration configuration)

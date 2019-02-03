@@ -1,6 +1,10 @@
 # Titan.Blog.WebAPP
 ASP.NET Core 2.2 前后端分离、后端框架，这个项目本人会长期维护下去。
 
+群号码：963718093 开源交流群，加群一起学习共同进步。
+[![.Net Core 开源学习交流](//pub.idqqimg.com/wpa/images/group.png ".Net Core 开源学习交流")](//shang.qq.com/wpa/qunwpa?idkey=d42b97a72adbb99729c59fc68173df53093e6d8908dd4588f2d81907a84d8f3b)
+
+
 # Demo 演示地址：http://gaobili.cn:8600/swagger/index.html
 
 # 博客园地址：https://www.cnblogs.com/hanjunjun-blog

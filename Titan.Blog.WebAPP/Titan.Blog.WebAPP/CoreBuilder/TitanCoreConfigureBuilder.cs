@@ -114,6 +114,11 @@ namespace Titan.Blog.WebAPP.CoreBuilder
 
         public void UseOther()
         {
+            //设置首页
+            DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            defaultFilesOptions.DefaultFileNames.Clear();
+            defaultFilesOptions.DefaultFileNames.Add("index.html");
+            _app.UseDefaultFiles(defaultFilesOptions);
             // 跳转https
             _app.UseHttpsRedirection();
             // 使用静态文件

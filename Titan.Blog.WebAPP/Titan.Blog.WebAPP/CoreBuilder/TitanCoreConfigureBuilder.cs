@@ -119,6 +119,13 @@ namespace Titan.Blog.WebAPP.CoreBuilder
             defaultFilesOptions.DefaultFileNames.Clear();
             defaultFilesOptions.DefaultFileNames.Add("index.html");
             _app.UseDefaultFiles(defaultFilesOptions);
+            //设置默认路由
+            //_app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
             // 跳转https
             _app.UseHttpsRedirection();
             // 使用静态文件

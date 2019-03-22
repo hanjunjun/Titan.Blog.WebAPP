@@ -307,8 +307,8 @@ namespace Titan.Blog.WebAPP.CoreBuilder
             builder.RegisterAssemblyTypes(assemblysModel).Where(x => x.Name == "ModelBaseContext")//从Model程序集中筛选类名==ModelBaseContext
                 .InstancePerLifetimeScope();//定义它的生命周期为同一个请求使用同一个EF上下文
             //还有一种比较灵活的注册方式，把你要注册class标记一个特性，这里只注册拥有特性BlogCacheAOP的类
-            builder.RegisterAssemblyTypes(assemblysModel).Where(x => x.Attributes.Equals(typeof(BlogCacheAOP)))
-                .InstancePerDependency();//指定它的生命周期
+            //builder.RegisterAssemblyTypes(assemblysModel).Where(x => x.Attributes.Equals(typeof(BlogCacheAOP)))
+            //    .InstancePerDependency();//指定它的生命周期
 
             #region IOC 服务解耦和EF仓储解耦
             var repositoryDllFile = Path.Combine(basePath, "Titan.Blog.Repository.dll");

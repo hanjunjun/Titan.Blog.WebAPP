@@ -31,8 +31,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Titan.Blog.IAppService\Titan.Blog.IAppService.csproj" />
     <ProjectReference Include="..\Titan.Blog.Infrastructure\Titan.Blog.Infrastructure.csproj" />
+    <ProjectReference Include="..\Titan.Blog.IRepository\Titan.Blog.IRepository.csproj" />
     <ProjectReference Include="..\Titan.Blog.Model\Titan.Blog.Model.csproj" />
-    <ProjectReference Include="..\Titan.Blog.Repository\Titan.Blog.Repository.csproj" />
   </ItemGroup>
 
 </Project>

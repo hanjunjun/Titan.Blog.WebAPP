@@ -22,14 +22,13 @@ namespace Titan.Blog.WebAPP.Controllers.v2
     {
         #region 成员、构造函数注入
         private readonly PermissionRequirement _permissionRequirement;
-        //private readonly AuthorDomainSvc _authorDomainSvc;
         private readonly IMainServices _iMainServices;
         private readonly IChildrenServices _iChildrenServices;
-        public EFCoreTestController(PermissionRequirement permissionRequirement, IMainServices iMainServices/*, AuthorDomainSvc authorDomainSvc*/
+
+        public EFCoreTestController(PermissionRequirement permissionRequirement, IMainServices iMainServices
             , IChildrenServices iChildrenServices)
         {
             _permissionRequirement = permissionRequirement;
-            //_authorDomainSvc = authorDomainSvc;
             _iMainServices = iMainServices;
             _iChildrenServices = iChildrenServices;
         }
@@ -41,7 +40,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
         /// <returns></returns>
         [HttpGet("EFQuery", Name = "EFQuery")]
         [AllowAnonymous]
-        public async Task<OpResult<string>> PostForm()
+        public async Task<OpResult<List<Children>>> PostForm()
         {
             var sqrt = Math.Sqrt(25);
             var userId = UserInfo.UserName;
@@ -57,16 +56,7 @@ namespace Titan.Blog.WebAPP.Controllers.v2
             model.Telphone = "11112312";
             await _iMainServices.AddModel(model);
 
-            //2
-            Random rd1 = new Random();
-            var data1 = await _iChildrenServices.GetList();
-            var model1 = new Children();
-            model1.Id = rd1.Next();
-            model1.Name = "面向对象";
-            model1.MainId = 1111;
-            await _iChildrenServices.AddModel(model1);
-
-            return new OpResult<string>(OpResultType.Success, "操作成功！");
+            return new OpResult<List<Children>>(OpResultType.Success, "操作成功！",test.Item1);
         }
 
         /// <summary>

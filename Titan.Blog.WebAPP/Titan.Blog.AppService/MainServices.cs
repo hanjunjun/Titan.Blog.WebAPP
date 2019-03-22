@@ -59,7 +59,7 @@ namespace Titan.Blog.AppService
         public async Task<Tuple<List<Main>,int>> GetList()
         {
             //ef 跟踪查询
-            Expression<Func<Children, bool>> where1 = x => x.Main.Telphone.Contains("11");
+            Expression<Func<Children, bool>> where1 = x => true;
             Expression<Func<Children, int>> orderby1 = x => x.Id;
             var dt = await _iChildrenRepository.Query(where1, orderby1, true, 1, 10);
             //更新数据
@@ -67,7 +67,7 @@ namespace Titan.Blog.AppService
             put.Name = "非跟踪更新";
             await _iChildrenRepository.Update(put);
 
-            Expression<Func<Main, bool>> where = x => x.Telphone.Contains("11");
+            Expression<Func<Main, bool>> where = x => true;
             Expression<Func<Main, string>> orderby = x => x.Name;
             var data=await Query(where, orderby, true, 1, 10);
             return data;
@@ -77,7 +77,7 @@ namespace Titan.Blog.AppService
         {
             //string redisConfiguration = Appsettings.app(new string[] { "AppSettings", "RedisCaching", "ConnectionString" });//获取连接字符串
             //ef非跟踪查询
-            Expression<Func<Children, bool>> where1 = x => x.Main.Telphone.Contains("11");
+            Expression<Func<Children, bool>> where1 = x => x.Main.Telphone!=null;
             Expression<Func<Children, string>> orderby1 = x => x.Name;
             Expression<Func<Children, string>> orderby2 = x => x.Id.ToString();
             var data= await _iChildrenRepository.QueryAsNoTracking<string>(where1, orderby1, orderby2, true, 1, 10);
@@ -85,9 +85,6 @@ namespace Titan.Blog.AppService
             var put = data.Item1.FirstOrDefault();
             put.Name = "非跟踪更新";
             await _iChildrenRepository.Update(put);
-             var test =  _iChildrenRepository.QueryAsNoTracking(x => x.Id == 1).Result.FirstOrDefault();
-            test.Name = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            await _iChildrenRepository.Update(test);
             return data;
         }
 
@@ -150,7 +147,7 @@ namespace Titan.Blog.AppService
                     await _iMainRepository.ExecuteSql($"INSERT INTO [dbo].[Main] ([id], [name], [telphone]) VALUES ('{rd.Next()}', 'test', '21')");
                     await _iMainRepository.ExecuteSql($"update [dbo].[Main] set name='事务更新测试'");
                     var data = await _iMainRepository.QueryAsNoTracking();//await必须加，不然commit提交之后，上下文就被释放了，这个时候_context.data.where()xxx就报错。无法访问的资源。
-                    var test = DateTime.Parse("1111");
+                    //var test = DateTime.Parse("1111");
                     tran.Commit();
                 }
                 catch (Exception e)

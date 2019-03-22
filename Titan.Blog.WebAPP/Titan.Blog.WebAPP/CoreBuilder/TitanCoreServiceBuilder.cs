@@ -23,6 +23,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Titan.Blog.Infrastructure.Cache;
 using Titan.Blog.Infrastructure.Log;
 using Titan.Blog.Model.CommonModel.Enums;
+using Titan.Blog.Model.DataModel;
 using Titan.Blog.WebAPP.AOP;
 using Titan.Blog.WebAPP.Auth.Policys;
 using Titan.Blog.WebAPP.AutoMapper;
@@ -286,81 +287,67 @@ namespace Titan.Blog.WebAPP.CoreBuilder
         public IServiceProvider AddIocContainer()
         {
             var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
-            //实例化 AutoFac  容器   
+            //1.创建Autofac容器   
             var builder = new ContainerBuilder();
             builder.RegisterType<BlogCacheAOP>();
             builder.Populate(_services);
-            //获取当前应用程序加载程序集（C/S应用中使用）
-            //var assembly = Assembly.GetExecutingAssembly();
-            //builder.RegisterAssemblyTypes(assembly); //注册所有程序集类定义的非静态类型
             builder.RegisterType<Permission>();
             builder.RegisterType<SigningCredentials>();
+
+            //2.注册对象
+            builder.RegisterType<SysUser>().InstancePerDependency();//注册SysUser到容器里，生命周期：每次都会返回一个新的实例，并且这是默认的生命周期。
+            builder.RegisterType<SysRole>().SingleInstance();//注册SysRole到容器，生命周期：单例，所有服务请求都将会返回同一个实例。
+            builder.RegisterType<SysUserRole>().InstancePerLifetimeScope();//注册SysUserRole到容器，生命周期：同一个HTPP请求上下文中实现单例。
+            //还有其他生命周期注册方式详细的请查阅官方文档，开发时根据你的实际情况选择合适的生命周期。
+
+            //3.批量注册对象
+            //上面的方法只能一个一个注册，如果你要注册100个类呢，那岂不是要写100行，Autofac提供了反射筛选注册的方式，还有xml注册方式，这里推荐使用反射注册，简单方便快捷。
+            var assemblysModel = Assembly.Load("Titan.Blog.Model");//因为Model已经引用到程序集里了，所以这里直接Load获取它的程序集
+
+            builder.RegisterAssemblyTypes(assemblysModel).Where(x => x.Name == "ModelBaseContext")//从Model程序集中筛选类名==ModelBaseContext
+                .InstancePerLifetimeScope();//定义它的生命周期为同一个请求使用同一个EF上下文
+            //还有一种比较灵活的注册方式，把你要注册class标记一个特性，这里只注册拥有特性BlogCacheAOP的类
+            builder.RegisterAssemblyTypes(assemblysModel).Where(x => x.Attributes.Equals(typeof(BlogCacheAOP)))
+                .InstancePerDependency();//指定它的生命周期
+
+            #region IOC 服务解耦和EF仓储解耦
             var repositoryDllFile = Path.Combine(basePath, "Titan.Blog.Repository.dll");
             var assemblysRepository = Assembly.LoadFile(repositoryDllFile);//Assembly.Load("Titan.Blog.Repository");
-            //var assemblysRepository = Assembly.Load("Titan.Blog.Repository");
             builder.RegisterAssemblyTypes(assemblysRepository).Where(x => x.Name.Contains("Repository")).AsImplementedInterfaces();
-            //builder.RegisterAssemblyTypes(assemblysRepository).Where(x => x.Name == "ModelBaseContext").InstancePerLifetimeScope();//注册ef上下文，这里是同一个请求，也就是同一个线程内，保证ef上下文唯一
+            //builder.RegisterAssemblyTypes(assemblysRepository).Where(x => x.Attributes.Equals(typeof(BlogCacheAOP))).AsImplementedInterfaces();
 
             var servicesDllFile = Path.Combine(basePath, "Titan.Blog.AppService.dll");//获取项目绝对路径
             var assemblysServices = Assembly.LoadFile(servicesDllFile);
-            // Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
-            //var assemblysServices =  Assembly.Load("Titan.Blog.AppService");//直接采用加载文件的方法
             builder.RegisterAssemblyTypes(assemblysServices)
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope()
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(BlogCacheAOP));//AOP切面缓存
+            #endregion
 
-            //builder.RegisterType(typeof(IBaseRepository<,>)).InstancePerDependency();//注册仓储泛型
-
-            //builder.RegisterAssemblyTypes(assemblysServices)
-            //    .EnableClassInterceptors()
-            //    // 如果你想注入两个，就这么写  InterceptedBy(typeof(BlogCacheAOP), typeof(BlogLogAOP));
-            //    .InterceptedBy(typeof(BlogCacheAOP));//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
-
-            var assemblysModel = Assembly.Load("Titan.Blog.Model");//直接采用加载文件的方法
-            builder.RegisterAssemblyTypes(assemblysModel).Where(x => x.Name == "ModelBaseContext").InstancePerLifetimeScope();//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
-
+            #region 废弃
             //var assemblysInfrastru = Assembly.Load("Titan.Blog.Infrastructure");//直接采用加载文件的方法
             //builder.RegisterAssemblyTypes(assemblysInfrastru);//指定已扫描程序集中的类型注册为提供所有其实现的接口。.InstancePerRequest()
-
             ////builder.RegisterAssemblyTypes(assemblysServices)
             ////         .AsImplementedInterfaces()
             ////         .InstancePerLifetimeScope()
             ////         .EnableInterfaceInterceptors()//引用Autofac.Extras.DynamicProxy;
             ////         .InterceptedBy(typeof(BlogCacheAOP));//允许将拦截器服务的列表分配给注册。可以直接替换其他拦截器
-
             //var infrastructureDllFile = Path.Combine(basePath, "Titan.Blog.Infrastructure.dll");//获取项目绝对路径
             //var assemblysInfrastructure = Assembly.LoadFile(infrastructureDllFile);//直接采用加载文件的方法
             //builder.RegisterAssemblyTypes(assemblysInfrastructure).AsSelf();//指定已扫描程序集中的类型注册为提供所有其实现的接口。
 
             //var modelDllFile = Path.Combine(basePath, "Titan.Blog.Model.dll");//获取项目绝对路径
             //var assemblysModel = Assembly.LoadFile(modelDllFile);//直接采用加载文件的方法
-            //builder.RegisterAssemblyTypes(assemblysModel).AsSelf();//指定已扫描程序集中的类型注册为提供所有其实现的接口。
+            //builder.RegisterAssemblyTypes(assemblysModel).AsSelf();//指定已扫描程序集中的类型注册为提供所有其实现的接口。;
+            #endregion
 
-
-
-            //var aa = Path.Combine(basePath, "Titan.Blog.WebAPP.dll");
-            //var bb = Assembly.LoadFile(aa);
-            //builder.RegisterAssemblyTypes(bb);
-
-            //使用已进行的组件登记创建新容器
+            //4.查看自己注册的对象是否在容器中。
             var applicationContainer = builder.Build();
-            //获取容器内的对象
-            //var data = applicationContainer.ComponentRegistry.Registrations
-            //    .Where(x => x.Activator.LimitType.ToString().Contains("Titan.RepositoryCode")).ToList();
-            //var dataf = applicationContainer.ComponentRegistry.Registrations
-            //    .Where(x => x.Activator.LimitType.ToString().Contains("Titan.Blog.AppService")).ToList();
-            //var data1 = applicationContainer.ComponentRegistry.Registrations
-            //    .Where(x => x.Activator.LimitType.ToString().Contains("BaseRepository")).ToList();
+            //获取容器内的对象-如果从容器中能查询到说明注册成功，如果注册不成功，后面构造函数注入就会报错的。可以利用下面的方式去排查问题。
             var fff = applicationContainer.ComponentRegistry.Registrations
                 .Where(x => x.Activator.LimitType.ToString().Contains("ModelBaseContext")).ToList();
-            //var clas1 = applicationContainer.Resolve<AuthorDomainSvc>();
-            //Console.WriteLine(clas1.GetList());
-            //var efdb= applicationContainer.ResolveOptional<ModelBaseContext>();
-            //var efdb1 = applicationContainer.Resolve<ModelBaseContext>();
-
-            return new AutofacServiceProvider(applicationContainer);//第三方IOC接管 core内置DI容器
+            return new AutofacServiceProvider(applicationContainer);//Autofac容器接管Net Core内置DI容器
         }
 
         

@@ -23,11 +23,14 @@ namespace Titan.Blog.Repository.Base
     public class BaseRepository<T, TEntityKey> : IBaseRepository<T, TEntityKey> where T : AggregateRoot, new()
     {
         #region 成员及构造
-        public ModelBaseContext _context { get; set; } // = DataContextFactory.GetDataContext();//从httpcontext中获取ef上下文
+        public ModelBaseContext _context { get; set; } //从httpcontext中获取ef上下文
+
+        //下面这个方法是自己维护EF上下文，原理是将EF上下文放在HTTP上下文里，来保持每次请求使用同一个EF上下文，HTTP接口请求结束之后销毁HTTP上下文，EF也会跟着销毁
+        //public ModelBaseContext _context = DataContextFactory.GetDataContext();
 
         public BaseRepository(ModelBaseContext contex)
         {
-            _context = contex;
+            _context = contex;//构造函数接收容器中的EF上下文
         }
         #endregion
 

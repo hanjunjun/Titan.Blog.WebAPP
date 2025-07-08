@@ -72,7 +72,7 @@ ASP.NET Core 2.2 前后端分离、后端框架，这个项目本人会长期维
 	  
 	  * ElementUI 基于Vue 2.0的前端UI组件库
 	  （前端目前还在学习中。）
-	  
+[![使用 EdgeOne Pages 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https://github.com/hanjunjun/Titan.Blog.WebAPP.git)
 # 开发计划：
 	
 	1.Swagger 导出API文档到Word、PDF、Html。--2019-01-06 已完成

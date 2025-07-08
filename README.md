@@ -72,18 +72,9 @@ ASP.NET Core 2.2 前后端分离、后端框架，这个项目本人会长期维
 	  
 	  * ElementUI 基于Vue 2.0的前端UI组件库
 	  （前端目前还在学习中。）
+# 赞助：
 [![使用 EdgeOne Pages 部署](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https://github.com/hanjunjun/Titan.Blog.WebAPP.git)
-# 开发计划：
-	
-	1.Swagger 导出API文档到Word、PDF、Html。--2019-01-06 已完成
-	2.Swagger 后台返回图像，前端显示图像。
-	3.接口加频率限制，超出频率提示验证码。
-	4.IP黑名单过滤。
-	5.EF Core 仓储模式重构。
-	6.AOP缓存实现  --2019-01-21 已完成
-	7.短信接口
-	8.微信集成
-	9.开源项目分支：EF Core POCO 代码生成器，使用RazorEngine MVC模板引擎实现，支持DBFirst和CodeFirst
-	10.内置任务调度服务
-	11.内置消息推送服务
+
+本项目 CDN 加速及安全防护由 Tencent EdgeOne 赞助 image https://edgeone.ai/zh?from=github
+
 	
